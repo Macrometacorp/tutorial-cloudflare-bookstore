@@ -1,6 +1,6 @@
 name = "workers"
 type = "javascript"
-account_id = ""
+account_id = "8ca2983f2ce88cbcf8b973646d551e0a"
 workers_dev = true
 route = ""
 zone_id = ""

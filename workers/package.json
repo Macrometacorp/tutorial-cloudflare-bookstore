@@ -12,5 +12,8 @@
   "license": "MIT",
   "devDependencies": {
     "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "jsc8": "^0.16.2"
   }
 }
