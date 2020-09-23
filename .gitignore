@@ -9,4 +9,3 @@ worker/
 node_modules/
 .cargo-ok
 build/
-dist/
