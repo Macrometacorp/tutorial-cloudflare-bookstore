@@ -7,7 +7,7 @@ const COLLECTIONS = [
         author: 'J.K. Rowling',
         category: 'Fantasy',
         cover: 'url-here',
-        id: 'b1',
+        _key: 'b1',
         name: "Harry Potter and the Sorcerer's Stone",
         price: 200,
         rating: 4.3,
@@ -16,7 +16,7 @@ const COLLECTIONS = [
         author: 'J.K. Rowling',
         category: 'Fantasy',
         cover: 'url-here',
-        id: 'b2',
+        _key: 'b2',
         name: 'Harry Potter and the Chamber of Secrets',
         price: 200,
         rating: 4.3,
@@ -25,7 +25,7 @@ const COLLECTIONS = [
         author: 'J.K. Rowling',
         category: 'Fantasy',
         cover: 'url-here',
-        id: 'b3',
+        _key: 'b3',
         name: 'Harry Potter and the Prisoner of Azkaban',
         price: 200,
         rating: 4.3,
@@ -34,7 +34,7 @@ const COLLECTIONS = [
         author: 'J.K. Rowling',
         category: 'Fantasy',
         cover: 'url-here',
-        id: 'b4',
+        _key: 'b4',
         name: 'Harry Potter and the Goblet of Fire',
         price: 200,
         rating: 4.3,
@@ -43,7 +43,7 @@ const COLLECTIONS = [
         author: 'J.K. Rowling',
         category: 'Fantasy',
         cover: 'url-here',
-        id: 'b5',
+        _key: 'b5',
         name: 'Harry Potter and the Order of the Phoenix',
         price: 200,
         rating: 4.3,
@@ -52,7 +52,7 @@ const COLLECTIONS = [
         author: 'J.K. Rowling',
         category: 'Fantasy',
         cover: 'url-here',
-        id: 'b6',
+        _key: 'b6',
         name: 'Harry Potter and the Half-Blood Prince',
         price: 200,
         rating: 4.3,
@@ -61,15 +61,25 @@ const COLLECTIONS = [
         author: 'J.K. Rowling',
         category: 'Fantasy',
         cover: 'url-here',
-        id: 'b7',
+        _key: 'b7',
         name: 'Harry Potter and the Deathly Hallows',
         price: 200,
         rating: 4.3,
       },
+      {
+        author: 'Paulo Coelho',
+        category: 'Fiction',
+        cover: 'url-here',
+        _key: 'b8',
+        name: "The Alchemist",
+        price: 200,
+        rating: 4.3,
+      }
     ],
   },
   { name: 'OrdersTable', data: [] },
   { name: 'CartTable', data: [] },
+  { name: 'Users', data: []}
 ]
 
 async function init(client) {
@@ -77,7 +87,7 @@ async function init(client) {
     const { name, data } = collection
     const coll = client.collection(name)
     
-    // TODO: remove once fixed from c8db
+    // TODO: remove once fixed from jsc8
     let exists = true
     try {
       const exists = await coll.exists()
