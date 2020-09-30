@@ -3,6 +3,10 @@ const init = require('./init')
 const jsc8 = require('jsc8')
 const { queries } = require('./c8qls')
 
+const initObj = {
+  headers: { 'content-type': 'application/json' },
+}
+
 const client = new jsc8({
   url: 'https://abhishek.eng3.macrometa.io',
   apiKey:
@@ -16,9 +20,6 @@ addEventListener('fetch', (event) => {
 
 async function initHandler(request) {
   let res
-  const initObj = {
-    headers: { 'content-type': 'application/json' },
-  }
 
   try {
     await init(client)
@@ -31,15 +32,23 @@ async function initHandler(request) {
 }
 
 async function handler(request, c8qlKey) {
-  const init = {
-    headers: { 'content-type': 'application/json' },
-  }
+  console.log(`-->${request.url}`)
   const splitUrl = request.url.split('/')
-  const bindValue = splitUrl[splitUrl.length - 1]
+  let bindValue = splitUrl[splitUrl.length - 1]
+
+  if (request.method === 'GET' && bindValue.includes('?')) {
+    // has query param
+    const queryParam = bindValue.split('?')[1].split('=')
+    bindValue = { [queryParam[0]]: queryParam[1] }
+  }
+
+  if (request.method === 'POST') {
+    bindValue = await request.json()
+  }
   const { query, bindVars } = queries(c8qlKey, bindValue)
   const result = await client.executeQuery(query, bindVars)
   const body = JSON.stringify(result)
-  return new Response(body, init)
+  return new Response(body, initObj)
 }
 
 async function handleRequest(request) {
@@ -48,42 +57,41 @@ async function handleRequest(request) {
   // init
   r.post('.*/init', (request) => initHandler(request))
 
-  // Books
   // ListBooks
-  r.get('.*/books', (request) => handler(request, 'LIST_BOOKS'))
+  r.get('.*/books*', (request) => handler(request, 'ListBooks'))
   // GetBook
-  r.get('.*/books/b[0-9]+', (request) => handler(request, 'GET_BOOK'))
+  r.get('.*/books/b[0-9]+', (request) => handler(request, 'GetBook'))
 
-  // Cart
   // ListItemsInCart
-  r.get('.*/cart', (request) => handler(request))
+  r.get('.*/cart', (request) => handler(request, 'ListItemsInCart'))
   // AddToCart
-  r.post('.*/cart', (request) => handler(request))
+  r.post('.*/cart', (request) => handler(request, 'AddToCart'))
   // UpdateCart
-  r.put('.*/cart', (request) => handler(request))
+  r.put('.*/cart', (request) => handler(request, 'UpdateCart'))
   // RemoveFromCart
-  r.delete('.*/cart', (request) => handler(request))
+  r.delete('.*/cart', (request) => handler(request, 'RemoveFromCart'))
   // GetCartItem
-  r.get('.*/cart/c[0-9]+', (request) => handler(request))
+  r.get('.*/cart/c[0-9]+', (request) => handler(request, 'GetCartItem'))
 
-  // Orders
   // ListOrders
-  r.get('.*/orders', (request) => handler(request))
+  r.get('.*/orders', (request) => handler(request, 'ListOrders'))
   // Checkout
-  r.post('.*/orders', (request) => handler(request))
+  r.post('.*/orders', (request) => handler(request, 'Checkout'))
 
-  // Best Sellers
   // GetBestSellers
-  r.get('.*/bestsellers', (request) => handler(request))
+  r.get('.*/bestsellers', (request) => handler(request, 'GetBestSellers'))
 
-  // Recommendations
   // GetRecommendations
-  r.get('.*/recommendations', (request) => handler(request))
+  r.get('.*/recommendations', (request) =>
+    handler(request, 'GetRecommendations'),
+  )
   // GetRecommendationsByBook
-  r.get('.*/recommendations/r[0-9]+', (request) => handler(request))
+  r.get('.*/recommendations/r[0-9]+', (request) =>
+    handler(request, 'GetRecommendationsByBook'),
+  )
 
   // Search
-  r.get('.*/search', (request) => handler(request))
+  r.get('.*/search', (request) => handler(request, 'Search'))
 
   // r.get('/demos/router/foo', (request) => fetch(request)) // return the response from the origin
 
