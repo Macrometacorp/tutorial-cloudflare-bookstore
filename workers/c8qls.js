@@ -1,6 +1,18 @@
 const queries = (queryName, bindValue) => {
   let queryObj
   switch (queryName) {
+    case 'signup':
+      queryObj = {
+        query: `INSERT {username: @username, password: @passwordHash, customerId: @customerId} INTO UsersTable`,
+        bindVars: bindValue,
+      }
+      break
+    case 'signin':
+      queryObj = {
+        query: `FOR user in UsersTable FILTER user.username == @username AND user.password == @passwordHash RETURN user.customerId`,
+        bindVars: bindValue,
+      }
+      break
     case 'ListBooks':
       queryObj = { query: 'FOR book IN BooksTable RETURN book', bindVars: {} }
       if (typeof bindValue === 'object') {

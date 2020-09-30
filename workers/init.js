@@ -71,22 +71,22 @@ const COLLECTIONS = [
         category: 'Fiction',
         cover: 'url-here',
         _key: 'b8',
-        name: "The Alchemist",
+        name: 'The Alchemist',
         price: 200,
         rating: 4.3,
-      }
+      },
     ],
   },
   { name: 'OrdersTable', data: [] },
   { name: 'CartTable', data: [] },
-  { name: 'Users', data: []}
+  { name: 'UsersTable', data: [] },
 ]
 
 async function init(client) {
   for (collection of COLLECTIONS) {
     const { name, data } = collection
     const coll = client.collection(name)
-    
+
     // TODO: remove once fixed from jsc8
     let exists = true
     try {

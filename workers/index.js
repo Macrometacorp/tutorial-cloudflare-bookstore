@@ -2,6 +2,7 @@ const Router = require('./router')
 const init = require('./init')
 const jsc8 = require('jsc8')
 const { queries } = require('./c8qls')
+const { uuid } = require('@cfworker/uuid')
 
 const initObj = {
   headers: { 'content-type': 'application/json' },
@@ -51,11 +52,58 @@ async function handler(request, c8qlKey) {
   return new Response(body, initObj)
 }
 
+async function signupHandler(request) {
+  const { username, password } = await request.json()
+
+  const myText = new TextEncoder().encode(password)
+
+  const myDigest = await crypto.subtle.digest(
+    {
+      name: 'SHA-256',
+    },
+    myText, // The data you want to hash as an ArrayBuffer
+  )
+  const passwordHash = new TextDecoder('utf-8').decode(myDigest)
+  const customerId = uuid()
+  const { query, bindVars } = queries('signup', {
+    username,
+    passwordHash,
+    customerId,
+  })
+  const result = await client.executeQuery(query, bindVars)
+  const body = JSON.stringify(result)
+  return new Response(body, initObj)
+}
+
+async function signinHandler(request) {
+  const { username, password } = await request.json()
+  const myText = new TextEncoder().encode(password)
+  const myDigest = await crypto.subtle.digest(
+    {
+      name: 'SHA-256',
+    },
+    myText, // The data you want to hash as an ArrayBuffer
+  )
+  const passwordHash = new TextDecoder('utf-8').decode(myDigest)
+
+  const { query, bindVars } = queries('signin', {
+    username,
+    passwordHash,
+  })
+  const result = await client.executeQuery(query, bindVars)
+  const body = JSON.stringify(result)
+  return new Response(body, initObj)
+}
+
 async function handleRequest(request) {
   const r = new Router()
 
   // init
   r.post('.*/init', (request) => initHandler(request))
+
+  r.post('.*/signup', (request) => signupHandler(request))
+
+  r.post('.*/signin', (request) => signinHandler(request))
 
   // ListBooks
   r.get('.*/books*', (request) => handler(request, 'ListBooks'))
