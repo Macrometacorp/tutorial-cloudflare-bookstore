@@ -4,6 +4,8 @@ const jsc8 = require('jsc8')
 const { queries } = require('./c8qls')
 const { uuid } = require('@cfworker/uuid')
 
+const CUSTOMER_ID_HEADER = 'x-customer-id'
+
 const initObj = {
   headers: { 'content-type': 'application/json' },
 }
@@ -14,6 +16,24 @@ const client = new jsc8({
     'demo.cloudflare.2lcagsrrw0DPLBI3GFpFYPVPVxJUsUhxJjNqOyOy2kErc197oD3brnhi0BUNVEvxcd6f2d',
   agent: fetch,
 })
+
+const getLastPathParam = (request) => {
+  const splitUrl = request.url.split('/')
+  return splitUrl[splitUrl.length - 1]
+}
+
+const executeQuery = async (c8qlKey, bindValue) => {
+  const { query, bindVars } = queries(c8qlKey, bindValue)
+  let result
+  try {
+    result = await client.executeQuery(query, bindVars)
+  } catch (err) {
+    result = err
+  }
+  return result
+}
+
+const getCustomerId = (request) => request.headers.get(CUSTOMER_ID_HEADER)
 
 addEventListener('fetch', (event) => {
   event.respondWith(handleRequest(event.request))
@@ -32,38 +52,68 @@ async function initHandler(request) {
   }
 }
 
-async function handler(request, c8qlKey) {
-  console.log(`-->${request.url}`)
-  const splitUrl = request.url.split('/')
-  let bindValue = splitUrl[splitUrl.length - 1]
-
-  if (request.method === 'GET' && bindValue.includes('?')) {
-    // has query param
+async function booksHandler(request, c8qlKey) {
+  let bindValue = getLastPathParam(request)
+  if (c8qlKey === 'ListBooks' && bindValue.includes('?category=')) {
     const queryParam = bindValue.split('?')[1].split('=')
     bindValue = { [queryParam[0]]: queryParam[1] }
   }
-
-  if (request.method === 'POST') {
-    bindValue = await request.json()
-  }
-  const { query, bindVars } = queries(c8qlKey, bindValue)
-  const result = await client.executeQuery(query, bindVars)
+  const result = await executeQuery(c8qlKey, bindValue)
   const body = JSON.stringify(result)
   return new Response(body, initObj)
 }
 
+async function cartHandler(request, c8qlKey) {
+  const customerId = getCustomerId(request)
+  // ABHISHEK: re-route to signup/signin?
+  let body = { error: true, code: 400, message: 'Customer Id not provided' }
+  if (customerId) {
+    let bindValue = { customerId }
+    let requestBody
+    if (request.method !== 'GET') {
+      requestBody = await request.json()
+      bindValue = { ...bindValue, ...requestBody }
+    } else if (c8qlKey === 'GetCartItem') {
+      bindValue = { ...bindValue, bookId: getLastPathParam(request) }
+    }
+    body = await executeQuery(c8qlKey, bindValue)
+  }
+  return new Response(JSON.stringify(body), initObj)
+}
+
+async function ordersHandler(request, c8qlKey) {
+  const customerId = getCustomerId(request)
+  let body = { error: true, code: 400, message: 'Customer Id not provided' }
+  if (customerId) {
+    let bindValue = { customerId }
+    if (c8qlKey === 'Checkout') {
+      // ABHISHEK: aws has books[] also.
+      // I don't see the point as all items in the cart have to be moved
+      bindValue = { ...bindValue, orderId: uuid(), orderDate: Date.now() }
+    }
+    body = await executeQuery(c8qlKey, bindValue)
+  }
+  return new Response(JSON.stringify(body), initObj)
+}
+
+async function bestSellersHandler(request, c8qlKey) {}
+
+async function recommendationsHandler(request, c8qlKey) {}
+
+async function searchHandler(request, c8qlKey) {}
+
 async function signupHandler(request) {
   const { username, password } = await request.json()
 
-  const myText = new TextEncoder().encode(password)
+  const encodedPassword = new TextEncoder().encode(password)
 
-  const myDigest = await crypto.subtle.digest(
+  const digestedPassword = await crypto.subtle.digest(
     {
       name: 'SHA-256',
     },
-    myText, // The data you want to hash as an ArrayBuffer
+    encodedPassword, // The data you want to hash as an ArrayBuffer
   )
-  const passwordHash = new TextDecoder('utf-8').decode(myDigest)
+  const passwordHash = new TextDecoder('utf-8').decode(digestedPassword)
   const customerId = uuid()
   const { query, bindVars } = queries('signup', {
     username,
@@ -77,14 +127,14 @@ async function signupHandler(request) {
 
 async function signinHandler(request) {
   const { username, password } = await request.json()
-  const myText = new TextEncoder().encode(password)
-  const myDigest = await crypto.subtle.digest(
+  const encodedPassword = new TextEncoder().encode(password)
+  const digestedPassword = await crypto.subtle.digest(
     {
       name: 'SHA-256',
     },
-    myText, // The data you want to hash as an ArrayBuffer
+    encodedPassword, // The data you want to hash as an ArrayBuffer
   )
-  const passwordHash = new TextDecoder('utf-8').decode(myDigest)
+  const passwordHash = new TextDecoder('utf-8').decode(digestedPassword)
 
   const { query, bindVars } = queries('signin', {
     username,
@@ -98,48 +148,38 @@ async function signinHandler(request) {
 async function handleRequest(request) {
   const r = new Router()
 
-  // init
   r.post('.*/init', (request) => initHandler(request))
 
   r.post('.*/signup', (request) => signupHandler(request))
 
   r.post('.*/signin', (request) => signinHandler(request))
 
-  // ListBooks
-  r.get('.*/books*', (request) => handler(request, 'ListBooks'))
-  // GetBook
-  r.get('.*/books/b[0-9]+', (request) => handler(request, 'GetBook'))
+  r.get('.*/books*', (request) => booksHandler(request, 'ListBooks'))
+  r.get('.*/books/b[0-9]+', (request) => booksHandler(request, 'GetBook'))
 
-  // ListItemsInCart
-  r.get('.*/cart', (request) => handler(request, 'ListItemsInCart'))
-  // AddToCart
-  r.post('.*/cart', (request) => handler(request, 'AddToCart'))
-  // UpdateCart
-  r.put('.*/cart', (request) => handler(request, 'UpdateCart'))
-  // RemoveFromCart
-  r.delete('.*/cart', (request) => handler(request, 'RemoveFromCart'))
-  // GetCartItem
-  r.get('.*/cart/c[0-9]+', (request) => handler(request, 'GetCartItem'))
+  r.get('.*/cart', (request) => cartHandler(request, 'ListItemsInCart'))
+  r.get('.*/cart/b[0-9]+', (request) => cartHandler(request, 'GetCartItem'))
+  r.post('.*/cart', (request) => cartHandler(request, 'AddToCart'))
+  r.put('.*/cart', (request) => cartHandler(request, 'UpdateCart'))
+  r.delete('.*/cart', (request) => cartHandler(request, 'RemoveFromCart'))
 
-  // ListOrders
-  r.get('.*/orders', (request) => handler(request, 'ListOrders'))
-  // Checkout
-  r.post('.*/orders', (request) => handler(request, 'Checkout'))
+  r.get('.*/orders', (request) => ordersHandler(request, 'ListOrders'))
+  // add all books from the Cart table to the Orders table
+  // remove all entries from the Cart table for the requested customer ID
+  r.post('.*/orders', (request) => ordersHandler(request, 'Checkout'))
 
-  // GetBestSellers
-  r.get('.*/bestsellers', (request) => handler(request, 'GetBestSellers'))
+  r.get('.*/bestsellers', (request) =>
+    bestSellersHandler(request, 'GetBestSellers'),
+  )
 
-  // GetRecommendations
   r.get('.*/recommendations', (request) =>
-    handler(request, 'GetRecommendations'),
+    recommendationsHandler(request, 'GetRecommendations'),
   )
-  // GetRecommendationsByBook
   r.get('.*/recommendations/r[0-9]+', (request) =>
-    handler(request, 'GetRecommendationsByBook'),
+    recommendationsHandler(request, 'GetRecommendationsByBook'),
   )
 
-  // Search
-  r.get('.*/search', (request) => handler(request, 'Search'))
+  r.get('.*/search', (request) => searchHandler(request, 'Search'))
 
   // r.get('/demos/router/foo', (request) => fetch(request)) // return the response from the origin
 
