@@ -96,8 +96,14 @@ function handlePrefix(prefix) {
 
 const CUSTOMER_ID_HEADER = "x-customer-id";
 
-const initObj = {
-  headers: { "content-type": "application/json" },
+const optionsObj = {
+  headers: {
+    "content-type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+  },
 };
 
 const client = new jsc8({
@@ -134,7 +140,7 @@ async function initHandler(request) {
   } catch (e) {
     res = e;
   } finally {
-    return new Response(JSON.stringify(res), initObj);
+    return new Response(JSON.stringify(res), optionsObj);
   }
 }
 
@@ -146,7 +152,7 @@ async function booksHandler(request, c8qlKey) {
   }
   const result = await executeQuery(c8qlKey, bindValue);
   const body = JSON.stringify(result);
-  return new Response(body, initObj);
+  return new Response(body, optionsObj);
 }
 
 async function cartHandler(request, c8qlKey) {
@@ -164,7 +170,7 @@ async function cartHandler(request, c8qlKey) {
     }
     body = await executeQuery(c8qlKey, bindValue);
   }
-  return new Response(JSON.stringify(body), initObj);
+  return new Response(JSON.stringify(body), optionsObj);
 }
 
 async function ordersHandler(request, c8qlKey) {
@@ -179,7 +185,7 @@ async function ordersHandler(request, c8qlKey) {
     }
     body = await executeQuery(c8qlKey, bindValue);
   }
-  return new Response(JSON.stringify(body), initObj);
+  return new Response(JSON.stringify(body), optionsObj);
 }
 
 async function bestSellersHandler(request, c8qlKey) {}
@@ -208,7 +214,7 @@ async function signupHandler(request) {
   });
   const result = await client.executeQuery(query, bindVars);
   const body = JSON.stringify(result);
-  return new Response(body, initObj);
+  return new Response(body, optionsObj);
 }
 
 async function signinHandler(request) {
@@ -228,7 +234,7 @@ async function signinHandler(request) {
   });
   const result = await client.executeQuery(query, bindVars);
   const body = JSON.stringify(result);
-  return new Response(body, initObj);
+  return new Response(body, optionsObj);
 }
 
 async function whoAmIHandler(request) {
@@ -239,7 +245,7 @@ async function whoAmIHandler(request) {
     message = customerId;
     status = 200;
   }
-  return new Response(JSON.stringify({ message }), { status });
+  return new Response(JSON.stringify({ message }), { status, ...optionsObj });
 }
 
 async function handleEvent(event) {
