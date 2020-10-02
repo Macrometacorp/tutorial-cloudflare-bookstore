@@ -34,7 +34,7 @@ export default class Home extends Component<HomeProps, HomeState> {
       return;
     }
   
-    this.setState({ isLoading: false });
+    this.setState({ isLoading: true });
   }
 
   renderLanding() {
