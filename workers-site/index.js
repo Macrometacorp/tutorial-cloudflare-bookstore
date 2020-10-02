@@ -231,11 +231,24 @@ async function signinHandler(request) {
   return new Response(body, initObj);
 }
 
+async function whoAmIHandler(request) {
+  const customerId = getCustomerId(request);
+  let msg = "Not logged In";
+  let status = 500;
+  if (customerId) {
+    msg = customerId;
+    status = 200;
+  }
+  return new Response(msg, { status });
+}
+
 async function handleEvent(event) {
   const { request } = event;
   const r = new Router();
 
   r.post(".*/init", (request) => initHandler(request));
+
+  r.get(".*/whoami", (request) => whoAmIHandler(request));
 
   r.post(".*/signup", (request) => signupHandler(request));
 
