@@ -183,7 +183,7 @@ async function handleRequest(request) {
 
   // r.get('/demos/router/foo', (request) => fetch(request)) // return the response from the origin
 
-  r.get('/', () => new Response('Hello worker!')) // return a default message for the root route
+  r.get('/.*', () => new Response('Hello worker!')) // return a default message for the root route
 
   const resp = await r.route(request)
   return resp

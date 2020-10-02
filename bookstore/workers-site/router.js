@@ -3,7 +3,7 @@
  * boolean indicating if the request uses that HTTP method,
  * header, host or referrer.
  */
-const Method = method => req =>
+const Method = (method) => (req) =>
   req.method.toLowerCase() === method.toLowerCase()
 const Connect = Method('connect')
 const Delete = Method('delete')
@@ -19,7 +19,7 @@ const Trace = Method('trace')
 // const Host = (host) => Header('host', host.toLowerCase())
 // const Referrer = (host) => Header('referrer', host.toLowerCase())
 
-const Path = regExp => req => {
+const Path = (regExp) => (req) => {
   const url = new URL(req.url)
   const path = url.pathname
   const match = path.match(regExp) || []
@@ -104,7 +104,7 @@ class Router {
    * true for all conditions (if any).
    */
   resolve(req) {
-    return this.routes.find(r => {
+    return this.routes.find((r) => {
       if (!r.conditions || (Array.isArray(r) && !r.conditions.length)) {
         return true
       }
@@ -113,7 +113,7 @@ class Router {
         return r.conditions(req)
       }
 
-      return r.conditions.every(c => c(req))
+      return r.conditions.every((c) => c(req))
     })
   }
 }

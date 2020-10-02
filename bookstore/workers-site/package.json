@@ -7,6 +7,8 @@
   "author": "Ashley Lewis <ashleymichal@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "~0.0.11"
+    "@cfworker/uuid": "^1.5.0",
+    "@cloudflare/kv-asset-handler": "~0.0.11",
+    "jsc8": "^0.16.2"
   }
 }
