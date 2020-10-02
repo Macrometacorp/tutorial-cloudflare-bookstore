@@ -233,13 +233,13 @@ async function signinHandler(request) {
 
 async function whoAmIHandler(request) {
   const customerId = getCustomerId(request);
-  let msg = "Not logged In";
+  let message = "Not logged In";
   let status = 500;
   if (customerId) {
-    msg = customerId;
+    message = customerId;
     status = 200;
   }
-  return new Response(msg, { status });
+  return new Response(JSON.stringify({ message }), { status });
 }
 
 async function handleEvent(event) {
