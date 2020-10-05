@@ -26,7 +26,7 @@ export class ProductRow extends React.Component<ProductRowProps, ProductRowState
   componentDidMount() {
     API.get("books", `/books/${this.props.bookId}`, null)
       .then(response => this.setState({ book: response }))
-      .catch(error => alert(error));
+      .catch(error => console.error(error));
   }
 
   render() {

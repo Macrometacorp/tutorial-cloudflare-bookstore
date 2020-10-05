@@ -44,7 +44,7 @@ export default class PastPurchases extends Component<PastPurchasesProps, PastPur
         isLoading: false
      });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
   }
 

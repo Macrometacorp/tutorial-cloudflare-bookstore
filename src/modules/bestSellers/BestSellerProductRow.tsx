@@ -38,7 +38,7 @@ export class ProductRow extends React.Component<ProductRowProps, ProductRowState
       const book = await this.getBook();
       this.setState({ book });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
   }
 

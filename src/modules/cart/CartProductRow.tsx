@@ -37,7 +37,7 @@ export class CartProductRow extends React.Component<CartProductRowProps, CartPro
       const book = await this.getBook(this.props.order);
       this.setState({ book });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
   }
 

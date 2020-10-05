@@ -29,7 +29,7 @@ export class FriendsBought extends React.Component<FriendsBoughtProps, FriendsBo
           isLoading: false
         });
       })
-      .catch(error => alert(error));
+      .catch(error => console.error(error));
   }
 
   render() {

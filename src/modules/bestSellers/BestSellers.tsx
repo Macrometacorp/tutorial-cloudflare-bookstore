@@ -37,7 +37,7 @@ export default class BestSellers extends React.Component<BestSellersProps, BestS
         isLoading: false
       });
     } catch(error) {
-      alert(error);
+      console.error(error);
     }
   }
 

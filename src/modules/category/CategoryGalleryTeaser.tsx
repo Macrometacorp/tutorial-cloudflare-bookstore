@@ -27,7 +27,7 @@ export class CategoryGalleryTeaser extends React.Component<CategoryGalleryTeaser
       const books = await this.listBooks();
       this.setState({ books });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
 
     this.setState({ isLoading: false });

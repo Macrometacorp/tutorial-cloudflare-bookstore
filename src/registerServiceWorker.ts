@@ -79,7 +79,7 @@ function registerValidSW(swUrl: string) {
       };
     })
     .catch(error => {
-      console.error('Error during service worker registration:', error);
+      console.erroror('Error during service worker registration:', error);
     });
 }
 

@@ -88,7 +88,7 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
       });
       this.setState({ user, loading: false });
     } catch (e) {
-      alert(e.message);
+      console.error(e.message);
       this.setState({ loading: false });
     }
   }
@@ -103,7 +103,7 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
       this.props.userHasAuthenticated(true);
       this.setState({ redirect: true })
     } catch (e) {
-      alert(e.message);
+      console.error(e.message);
       this.setState({ loading: false });
     }
   }

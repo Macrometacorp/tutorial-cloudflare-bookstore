@@ -46,7 +46,7 @@ export class SearchGallery extends React.Component<SearchGalleryProps, SearchGal
         books: books
       });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
 
     this.setState({ isLoading: false });

@@ -35,7 +35,7 @@ export default class ShoppingCart extends Component<ShoppingCartProps, ShoppingC
         orders: ordersInCart,
       });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
 
     this.getOrderTotal();

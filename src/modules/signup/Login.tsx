@@ -59,7 +59,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
       this.props.userHasAuthenticated(true);
       this.setState({ redirect: true })
     } catch (e) {
-      alert(e.message);
+      console.error(e.message);
       this.setState({ loading: false });
     }
   }

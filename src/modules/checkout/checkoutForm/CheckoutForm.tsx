@@ -40,7 +40,7 @@ export class CheckoutForm extends React.Component<CheckoutFormProps, CheckoutFor
         orders: orders
       });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
 
     this.setState({ isLoading: false });

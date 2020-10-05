@@ -28,7 +28,7 @@ class FriendRecommendations extends React.Component<FriendRecommendationsProps, 
       const friends = await this.getFriends();
       this.setState({ friends });
     } catch (e) {
-      alert(e);
+      console.error(e);
     }
   }
 
