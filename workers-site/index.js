@@ -99,10 +99,6 @@ const CUSTOMER_ID_HEADER = "x-customer-id";
 const optionsObj = {
   headers: {
     "content-type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Max-Age": "86400",
   },
 };
 
