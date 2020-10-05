@@ -207,12 +207,11 @@ async function signupHandler(request) {
   );
   const passwordHash = new TextDecoder("utf-8").decode(digestedPassword);
   const customerId = uuid();
-  const { query, bindVars } = queries("signup", {
+  const result = await executeQuery("signup", {
     username,
     passwordHash,
     customerId,
   });
-  const result = await client.executeQuery(query, bindVars);
   const body = JSON.stringify(result);
   return new Response(body, optionsObj);
 }
@@ -227,14 +226,18 @@ async function signinHandler(request) {
     encodedPassword // The data you want to hash as an ArrayBuffer
   );
   const passwordHash = new TextDecoder("utf-8").decode(digestedPassword);
-
-  const { query, bindVars } = queries("signin", {
+  const result = await executeQuery("signin", {
     username,
     passwordHash,
   });
-  const result = await client.executeQuery(query, bindVars);
-  const body = JSON.stringify(result);
-  return new Response(body, optionsObj);
+  let message = "User not found";
+  let status = 404;
+  if (result.length) {
+    message = result;
+    status = 200;
+  }
+  const body = JSON.stringify({ message });
+  return new Response(body, { status, ...optionsObj });
 }
 
 async function whoAmIHandler(request) {
