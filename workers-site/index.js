@@ -241,7 +241,7 @@ async function whoAmIHandler(request) {
   const customerId = getCustomerId(request);
   let message = "Not logged In";
   let status = 500;
-  if (customerId) {
+  if (customerId !== "null" && customerId) {
     message = customerId;
     status = 200;
   }
