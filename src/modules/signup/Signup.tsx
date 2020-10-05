@@ -92,10 +92,7 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
     this.setState({ loading: true });
 
     try {
-      const user = await Auth.signUp({
-        username: this.state.email,
-        password: this.state.password,
-      });
+      const user = await Auth.signUp(this.state.email, this.state.password);
       this.setState({ user, loading: false });
     } catch (e) {
       console.error(e.message);
@@ -108,7 +105,8 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
     this.setState({ loading: true });
 
     try {
-      await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
+      // ABHISHEK
+      // await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
       await Auth.signIn(this.state.email, this.state.password);
       this.props.userHasAuthenticated(true);
       this.setState({ redirect: true });
