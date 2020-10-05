@@ -38,4 +38,4 @@ const Auth = {
   confirmSignIn: function () {},
 };
 
-export default Auth;
+export { Auth };

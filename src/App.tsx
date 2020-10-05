@@ -1,4 +1,4 @@
-import Auth from "./apiCalls";
+import { Auth } from "./apiCalls";
 import React, { Component, Fragment } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link, withRouter } from "react-router-dom";

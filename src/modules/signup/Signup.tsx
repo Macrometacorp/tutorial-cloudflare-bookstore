@@ -1,7 +1,14 @@
-import { Auth } from "aws-amplify";
+import { Auth } from "../../apiCalls";
 import React from "react";
-import { Redirect } from 'react-router';
-import { FormGroup, FormControl, ControlLabel, Button, Glyphicon, HelpBlock } from "react-bootstrap";
+import { Redirect } from "react-router";
+import {
+  FormGroup,
+  FormControl,
+  ControlLabel,
+  Button,
+  Glyphicon,
+  HelpBlock,
+} from "react-bootstrap";
 import "./signup.css";
 import "./home.css";
 
@@ -41,7 +48,7 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
       confirmPasswordValid: undefined,
       confirmationCodeValid: undefined,
       user: undefined,
-      redirect: false
+      redirect: false,
     };
   }
 
@@ -49,67 +56,70 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
     const target = event.target as HTMLInputElement;
     this.setState({
       email: target.value,
-      emailValid: emailRegex.test(target.value.toLowerCase()) ? 'success' : 'error'
+      emailValid: emailRegex.test(target.value.toLowerCase())
+        ? "success"
+        : "error",
     });
-  }
+  };
 
   onPasswordChange = (event: React.FormEvent<FormControl>) => {
     const target = event.target as HTMLInputElement;
     this.setState({
       password: target.value,
-      passwordValid: target.value.length < 8 ? 'error' : 'success'
+      passwordValid: target.value.length < 8 ? "error" : "success",
     });
-  }
+  };
 
   onConfirmPasswordChange = (event: React.FormEvent<FormControl>) => {
     const target = event.target as HTMLInputElement;
     this.setState({
       confirmPassword: target.value,
-      confirmPasswordValid: target.value !== this.state.password ? 'error' : 'success'
+      confirmPasswordValid:
+        target.value !== this.state.password ? "error" : "success",
     });
-  }
+  };
 
   onConfirmationCodeChange = (event: React.FormEvent<FormControl>) => {
     const target = event.target as HTMLInputElement;
     this.setState({
       confirmationCode: target.value,
-      confirmationCodeValid: target.value.length > 0 ? 'error' : 'success'
+      confirmationCodeValid: target.value.length > 0 ? "error" : "success",
     });
-  }
+  };
 
   onSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     this.setState({ loading: true });
-  
+
     try {
       const user = await Auth.signUp({
         username: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       });
       this.setState({ user, loading: false });
     } catch (e) {
       console.error(e.message);
       this.setState({ loading: false });
     }
-  }
-  
+  };
+
   onConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     this.setState({ loading: true });
-  
+
     try {
       await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
       await Auth.signIn(this.state.email, this.state.password);
       this.props.userHasAuthenticated(true);
-      this.setState({ redirect: true })
+      this.setState({ redirect: true });
     } catch (e) {
       console.error(e.message);
       this.setState({ loading: false });
     }
-  }
+  };
 
   showConfirmationForm = () => {
-    if (this.state.redirect) return <Redirect to='/' />
+    if (this.state.redirect) return <Redirect to="/" />;
 
     return (
       <form onSubmit={this.onConfirm}>
@@ -120,20 +130,27 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
             type="tel"
             bsSize="large"
             value={this.state.confirmationCode}
-            onChange={this.onConfirmationCodeChange} />
+            onChange={this.onConfirmationCodeChange}
+          />
           <FormControl.Feedback />
-          <HelpBlock>A confirmation code will be sent to the email address provided</HelpBlock>
+          <HelpBlock>
+            A confirmation code will be sent to the email address provided
+          </HelpBlock>
         </FormGroup>
         <Button
           block
           bsSize="large"
           type="submit"
-          disabled={this.state.confirmationCodeValid === 'success'}>
-          {this.state.loading && <Glyphicon glyph="refresh" className="spinning" />}Confirm
+          disabled={this.state.confirmationCodeValid === "success"}
+        >
+          {this.state.loading && (
+            <Glyphicon glyph="refresh" className="spinning" />
+          )}
+          Confirm
         </Button>
       </form>
     );
-  }
+  };
 
   showSignupForm = () => {
     return (
@@ -145,45 +162,64 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
             type="email"
             bsSize="large"
             value={this.state.email}
-            onChange={this.onEmailChange} />
+            onChange={this.onEmailChange}
+          />
           <FormControl.Feedback />
         </FormGroup>
-        <FormGroup controlId="password" validationState={this.state.passwordValid}>
+        <FormGroup
+          controlId="password"
+          validationState={this.state.passwordValid}
+        >
           <ControlLabel>Password</ControlLabel>
           <FormControl
             name="password"
             type="password"
             bsSize="large"
             value={this.state.password}
-            onChange={this.onPasswordChange} />
+            onChange={this.onPasswordChange}
+          />
           <FormControl.Feedback />
           <HelpBlock>Must be at least 8 characters</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="confirmPassword" validationState={this.state.confirmPasswordValid}>
+        <FormGroup
+          controlId="confirmPassword"
+          validationState={this.state.confirmPasswordValid}
+        >
           <ControlLabel>Confirm Password</ControlLabel>
           <FormControl
             name="confirmPassword"
             type="password"
             bsSize="large"
             value={this.state.confirmPassword}
-            onChange={this.onConfirmPasswordChange} />
+            onChange={this.onConfirmPasswordChange}
+          />
           <FormControl.Feedback />
         </FormGroup>
         <Button
           block
           bsSize="large"
           type="submit"
-          disabled={this.state.passwordValid !== 'success' || this.state.confirmPasswordValid !== 'success' || this.state.emailValid !== 'success'}>
-          {this.state.loading && <Glyphicon glyph="refresh" className="spinning" />}Log in
+          disabled={
+            this.state.passwordValid !== "success" ||
+            this.state.confirmPasswordValid !== "success" ||
+            this.state.emailValid !== "success"
+          }
+        >
+          {this.state.loading && (
+            <Glyphicon glyph="refresh" className="spinning" />
+          )}
+          Log in
         </Button>
       </form>
     );
-  }
+  };
 
   render() {
     return (
       <div className="Signup">
-        {this.state.user === undefined ? this.showSignupForm() : this.showConfirmationForm()}
+        {this.state.user === undefined
+          ? this.showSignupForm()
+          : this.showConfirmationForm()}
       </div>
     );
   }
