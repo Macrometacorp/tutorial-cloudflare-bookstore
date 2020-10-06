@@ -4,7 +4,7 @@ import { SearchBar } from "../search/searchBar/SearchBar";
 import "../../common/hero/hero.css";
 import { CartProductRow, Order } from "./CartProductRow";
 import "../../common/styles/common.css";
-import { API } from "aws-amplify";
+import { API } from "../../apiCalls";
 import { Redirect } from "react-router";
 
 interface ShoppingCartProps {}

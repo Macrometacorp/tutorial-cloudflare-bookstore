@@ -1,5 +1,5 @@
 import React from "react";
-import { API } from "aws-amplify";
+import { API } from "../../apiCalls";
 
 import AddToCart from "../../common/AddToCart";
 import FriendRecommendations from "../../common/friendRecommendations/FriendRecommendations";

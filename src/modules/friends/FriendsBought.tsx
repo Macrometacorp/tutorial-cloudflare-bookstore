@@ -1,6 +1,6 @@
 import React from "react";
 import { ProductRow } from "./ProductRow";
-import { API } from "aws-amplify";
+import { API } from "../../apiCalls";
 
 interface FriendsBoughtProps {
 

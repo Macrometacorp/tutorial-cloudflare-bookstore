@@ -1,6 +1,6 @@
 import React from "react";
 import "../../common/styles/productRow.css";
-import { API } from "aws-amplify";
+import { API } from "../../apiCalls";
 import StarRating from "../../common/starRating/StarRating";
 import FriendRecommendations from "../../common/friendRecommendations/FriendRecommendations";
 import { Glyphicon } from "react-bootstrap";

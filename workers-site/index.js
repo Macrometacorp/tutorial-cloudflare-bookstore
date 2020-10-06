@@ -144,7 +144,7 @@ async function booksHandler(request, c8qlKey) {
   let bindValue = getLastPathParam(request);
   if (c8qlKey === "ListBooks" && bindValue.includes("?category=")) {
     const queryParam = bindValue.split("?")[1].split("=");
-    bindValue = { [queryParam[0]]: queryParam[1] };
+    bindValue = { [queryParam[0]]: decodeURI(queryParam[1]) };
   }
   const result = await executeQuery(c8qlKey, bindValue);
   const body = JSON.stringify(result);
@@ -285,9 +285,6 @@ async function handleEvent(event) {
   );
 
   r.get(".*/search", (request) => searchHandler(request, "Search"));
-
-  // ABHISHEK: remove this later
-  r.get("/test", () => new Response(`Hello worker!`)); // return a default message for the root route
 
   r.get("/.*", () => handleAssetEvent(event));
 

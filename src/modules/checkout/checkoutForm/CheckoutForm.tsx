@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ControlLabel, Form, FormControlProps } from "re
 
 import "./checkoutForm.css";
 import supportedCards from "../../../images/supportedCards.png";
-import { API } from "aws-amplify";
+import { API } from "../../../apiCalls";
 import { Redirect } from "react-router";
 
 interface CheckoutFormProps {}

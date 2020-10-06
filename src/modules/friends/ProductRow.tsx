@@ -1,7 +1,7 @@
 import React from "react";
 import "../../common/styles/productRow.css";
 import StarRating from "../../common/starRating/StarRating";
-import { API } from "aws-amplify";
+import { API } from "../../apiCalls";
 import AddToCart from "../../common/AddToCart";
 import FriendRecommendations from "../../common/friendRecommendations/FriendRecommendations";
 import { Book } from "../bestSellers/BestSellerProductRow";
