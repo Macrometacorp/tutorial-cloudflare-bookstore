@@ -38,7 +38,7 @@ export class CartProductRow extends React.Component<
   async componentDidMount() {
     try {
       const book = await this.getBook(this.props.order);
-      this.setState({ book });
+      this.setState({ book: book[0] });
     } catch (e) {
       console.error(e);
     }
@@ -77,7 +77,7 @@ export class CartProductRow extends React.Component<
           <div className="media-left media-middle">
             <img
               className="media-object product-thumb"
-              src={this.state.book["_key"]}
+              src={`./getImage?bookId=${this.state.book["_key"]}`}
               alt={`${this.state.book.name} cover`}
             />
           </div>

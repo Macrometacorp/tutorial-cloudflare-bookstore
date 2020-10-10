@@ -38,7 +38,7 @@ export class ProductRow extends React.Component<
   async componentDidMount() {
     try {
       const book = await this.getBook();
-      this.setState({ book });
+      this.setState({ book: book[0] });
     } catch (e) {
       console.error(e);
     }
