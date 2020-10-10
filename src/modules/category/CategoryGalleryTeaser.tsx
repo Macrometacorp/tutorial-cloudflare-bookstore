@@ -58,7 +58,7 @@ export class CategoryGalleryTeaser extends React.Component<
             </h3>
             <div className="row">
               {this.state.books.slice(0, 4).map((book: any) => (
-                <CategoryGalleryBook book={book} key={book.id} />
+                <CategoryGalleryBook book={book} key={book["_key"]} />
               ))}
             </div>
           </div>

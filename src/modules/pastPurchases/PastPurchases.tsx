@@ -3,7 +3,7 @@ import { CategoryNavBar } from "../category/categoryNavBar/CategoryNavBar";
 import { SearchBar } from "../search/searchBar/SearchBar";
 import "../../common/hero/hero.css";
 import { PurchasedProductRow } from "./PurchasedProductRow";
-import { Auth, API } from "aws-amplify";
+import { Auth, API } from "../../apiCalls";
 import bestSellers from "../../images/bestSellers.png";
 import yourshoppingcart from "../../images/yourshoppingcart.png";
 import { Order } from "../cart/CartProductRow";

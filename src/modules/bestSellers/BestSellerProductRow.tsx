@@ -11,8 +11,7 @@ interface ProductRowProps {
 }
 
 export interface Book {
-  id: string;
-  cover: string;
+  _key: string;
   price: number;
   category: string;
   name: string;
@@ -24,7 +23,10 @@ interface ProductRowState {
   book: Book | undefined;
 }
 
-export class ProductRow extends React.Component<ProductRowProps, ProductRowState> {
+export class ProductRow extends React.Component<
+  ProductRowProps,
+  ProductRowState
+> {
   constructor(props: ProductRowProps) {
     super(props);
 
@@ -53,17 +55,29 @@ export class ProductRow extends React.Component<ProductRowProps, ProductRowState
       <div className="white-box">
         <div className="media">
           <div className="media-left media-middle no-padding">
-            <img className="media-object product-thumb" src={this.state.book.cover} alt={`${this.state.book.name} cover`} />
+            <img
+              className="media-object product-thumb"
+              src={this.state.book["_key"]}
+              alt={`${this.state.book.name} cover`}
+            />
           </div>
           <div className="media-body product-padding padding-20">
-            <h3 className="media-heading">{this.state.book.name}
-              <small className="pull-right margin-1"><h4>${this.state.book.price}</h4></small>
+            <h3 className="media-heading">
+              {this.state.book.name}
+              <small className="pull-right margin-1">
+                <h4>${this.state.book.price}</h4>
+              </small>
             </h3>
-            <p><small>{this.state.book.category}</small></p>
+            <p>
+              <small>{this.state.book.category}</small>
+            </p>
             <FriendRecommendations bookId={this.props.bookId} />
             <div>
               Rating
-              <AddToCart bookId={this.props.bookId} price={this.state.book.price} />
+              <AddToCart
+                bookId={this.props.bookId}
+                price={this.state.book.price}
+              />
             </div>
             <StarRating stars={this.state.book.rating} />
           </div>
@@ -74,5 +88,3 @@ export class ProductRow extends React.Component<ProductRowProps, ProductRowState
 }
 
 export default ProductRow;
-
-

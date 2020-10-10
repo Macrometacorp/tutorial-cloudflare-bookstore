@@ -46,7 +46,7 @@ export class CategoryGallery extends React.Component<CategoryGalleryProps, Categ
           <div className="container-category">
             <h3>{this.props.match.params.id}</h3>
             <div className="row">
-              {this.state.books.map(book => <CategoryGalleryBook book={book} key={book.id} />)}
+              {this.state.books.map(book => <CategoryGalleryBook book={book} key={book["_key"]} />)}
             </div>
           </div>
         </div>

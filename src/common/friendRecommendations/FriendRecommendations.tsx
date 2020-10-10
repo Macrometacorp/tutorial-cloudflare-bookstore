@@ -1,4 +1,4 @@
-import { API } from 'aws-amplify';
+import { API } from '../../apiCalls';
 import React from 'react';
 import { FriendThumb } from './FriendThumb';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { API } from 'aws-amplify';
+import { API } from '../apiCalls';
 import { Redirect } from 'react-router';
 import { Glyphicon } from 'react-bootstrap';
 
@@ -26,8 +26,8 @@ class AddToCart extends React.Component<AddToCartProps, AddToCartState> {
 
   onAddToCart = async () => {
     this.setState({ loading: true });
-    const bookInCart = await API.get("cart", `/cart/${this.props.bookId}`, null);
-
+    let bookInCart = await API.get("cart", `/cart/${this.props.bookId}`, null);
+    bookInCart = bookInCart[0];
     // if the book already exists in the cart, increase the quantity
     if (bookInCart) {
       API.put("cart", "/cart", {

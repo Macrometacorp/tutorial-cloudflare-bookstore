@@ -32,10 +32,10 @@ export class SearchGallery extends React.Component<SearchGalleryProps, SearchGal
       for (var i = 0; i < searchResults.hits.total; i++) {
         var hit = searchResults.hits.hits[i] && searchResults.hits.hits[i]._source;
         hit && books.push({
+          _key: hit.id.$,
           author: hit.author.S,
           category: hit.category.S,
-          cover: hit.cover.S,
-          id: hit.id.S,
+          // id: hit.id.S,
           name: hit.name.S,
           price: hit.price.N,
           rating: hit.rating.N,
@@ -64,7 +64,7 @@ export class SearchGallery extends React.Component<SearchGalleryProps, SearchGal
           <div className="container-category">
             <h3>Search results</h3>
             <div className="row">
-              {this.state.books.map(book => <CategoryGalleryBook book={book} key={book.id} />)}
+              {this.state.books.map(book => <CategoryGalleryBook book={book} key={book["_key"]} />)}
             </div>
           </div>
         </div>
