@@ -16,8 +16,7 @@ const { decode } = require("base64-arraybuffer");
  *    than the default 404.html page.
  */
 
-// ABHISHEK
-const DEBUG = true;
+const DEBUG = false;
 
 addEventListener("fetch", (event) => {
   try {
@@ -118,10 +117,6 @@ const getLastPathParam = (request) => {
 const executeQuery = async (c8qlKey, bindValue) => {
   const { query, bindVars } = queries(c8qlKey, bindValue);
   let result;
-  // ABHISHEK
-  console.log("================");
-  console.log(JSON.stringify({ c8qlKey, bindValue }));
-  console.log("----------------");
   try {
     result = await client.executeQuery(query, bindVars);
   } catch (err) {
