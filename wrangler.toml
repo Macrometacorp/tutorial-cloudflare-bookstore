@@ -4,11 +4,6 @@ account_id = "b3dad22670b88424da9afddc967218a2"
 workers_dev = true
 route = ""
 zone_id = ""
-
-kv-namespaces = [
-    { binding = "BOOK_IMAGES", id = "1fcd1c0a7aae4c958bde0606dd090d95" }
-]
-
 [site]
 bucket = "./build"
 entry-point = "workers-site"
