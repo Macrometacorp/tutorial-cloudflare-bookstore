@@ -7,6 +7,7 @@ const init = require("./init");
 const jsc8 = require("jsc8");
 const { queries } = require("./c8qls");
 const { uuid } = require("@cfworker/uuid");
+const { decode } = require("base64-arraybuffer");
 /**
  * The DEBUG flag will do two things that help during development:
  * 1. we will skip caching on the edge, which makes it easier to
@@ -117,6 +118,10 @@ const getLastPathParam = (request) => {
 const executeQuery = async (c8qlKey, bindValue) => {
   const { query, bindVars } = queries(c8qlKey, bindValue);
   let result;
+  // ABHISHEK
+  console.log("================");
+  console.log(JSON.stringify({ c8qlKey, bindValue }));
+  console.log("----------------");
   try {
     result = await client.executeQuery(query, bindVars);
   } catch (err) {
@@ -247,6 +252,19 @@ async function whoAmIHandler(request) {
   return new Response(JSON.stringify({ message }), { status, ...optionsObj });
 }
 
+async function getImageHandler(request) {
+  const queryParam = getLastPathParam(request);
+  const bookId = queryParam.split("?")[1].split("=")[1];
+  // const res = await BOOK_IMAGES.get(bookId, "arrayBuffer");
+  const res = await client.getValueForKey("ImagesKVTable", bookId);
+  const base64Img = res.value;
+  const response = new Response(decode(base64Img), {
+    headers: { "Content-Type": "image/jpeg" },
+  });
+
+  return response;
+}
+
 async function handleEvent(event) {
   const { request } = event;
   const r = new Router();
@@ -283,6 +301,8 @@ async function handleEvent(event) {
   r.get(".*/recommendations/r[0-9]+", (request) =>
     recommendationsHandler(request, "GetRecommendationsByBook")
   );
+
+  r.get(".*/getImage*", (request) => getImageHandler(request));
 
   r.get(".*/search", (request) => searchHandler(request, "Search"));
 
