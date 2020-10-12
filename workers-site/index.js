@@ -29,7 +29,7 @@ addEventListener("fetch", (event) => {
         })
       );
     }
-    event.respondWith(new Response("Internal Error", { status: 500 }));
+    event.respondWith(new Response(e.message || e.toString(), { status: 500 }));
   }
 });
 
@@ -105,7 +105,7 @@ const optionsObj = {
 const client = new jsc8({
   url: "https://abhishek.eng3.macrometa.io",
   apiKey:
-    "demo.cloudflare.2lcagsrrw0DPLBI3GFpFYPVPVxJUsUhxJjNqOyOy2kErc197oD3brnhi0BUNVEvxcd6f2d",
+    "demo.cloudflare.vtVSap8GhoUGCKc2pedimUaUzeOHNWEAJidMNe72uGD0woO8OBSMggP99KGdSkiMc13ff4",
   agent: fetch,
 });
 
@@ -239,7 +239,7 @@ async function signinHandler(request) {
 async function whoAmIHandler(request) {
   const customerId = getCustomerId(request);
   let message = "Not logged In";
-  let status = 500;
+  let status = 401;
   if (customerId !== "null" && customerId) {
     message = customerId;
     status = 200;
@@ -263,45 +263,51 @@ async function handleEvent(event) {
   const { request } = event;
   const r = new Router();
 
-  r.post(".*/init", (request) => initHandler(request));
+  r.post(".*/api/init", (request) => initHandler(request));
 
-  r.get(".*/whoami", (request) => whoAmIHandler(request));
+  r.get(".*/api/whoami", (request) => whoAmIHandler(request));
 
-  r.post(".*/signup", (request) => signupHandler(request));
+  r.post(".*/api/signup", (request) => signupHandler(request));
 
-  r.post(".*/signin", (request) => signinHandler(request));
+  r.post(".*/api/signin", (request) => signinHandler(request));
 
-  r.get(".*/books*", (request) => booksHandler(request, "ListBooks"));
-  r.get(".*/books/b[0-9]+", (request) => booksHandler(request, "GetBook"));
+  r.get(".*/api/books*", (request) => booksHandler(request, "ListBooks"));
+  r.get(".*/api/books/b[0-9]+", (request) => booksHandler(request, "GetBook"));
 
-  r.get(".*/cart", (request) => cartHandler(request, "ListItemsInCart"));
-  r.get(".*/cart/b[0-9]+", (request) => cartHandler(request, "GetCartItem"));
-  r.post(".*/cart", (request) => cartHandler(request, "AddToCart"));
-  r.put(".*/cart", (request) => cartHandler(request, "UpdateCart"));
-  r.delete(".*/cart", (request) => cartHandler(request, "RemoveFromCart"));
+  r.get(".*/api/cart", (request) => cartHandler(request, "ListItemsInCart"));
+  r.get(".*/api/cart/b[0-9]+", (request) =>
+    cartHandler(request, "GetCartItem")
+  );
+  r.post(".*/api/cart", (request) => cartHandler(request, "AddToCart"));
+  r.put(".*/api/cart", (request) => cartHandler(request, "UpdateCart"));
+  r.delete(".*/api/cart", (request) => cartHandler(request, "RemoveFromCart"));
 
-  r.get(".*/orders", (request) => ordersHandler(request, "ListOrders"));
+  r.get(".*/api/orders", (request) => ordersHandler(request, "ListOrders"));
   // add all books from the Cart table to the Orders table
   // remove all entries from the Cart table for the requested customer ID
-  r.post(".*/orders", (request) => ordersHandler(request, "Checkout"));
+  r.post(".*/api/orders", (request) => ordersHandler(request, "Checkout"));
 
-  r.get(".*/bestsellers", (request) =>
+  r.get(".*/api/bestsellers", (request) =>
     bestSellersHandler(request, "GetBestSellers")
   );
 
-  r.get(".*/recommendations", (request) =>
+  r.get(".*/api/recommendations", (request) =>
     recommendationsHandler(request, "GetRecommendations")
   );
-  r.get(".*/recommendations/r[0-9]+", (request) =>
+  r.get(".*/api/recommendations/r[0-9]+", (request) =>
     recommendationsHandler(request, "GetRecommendationsByBook")
   );
 
-  r.get(".*/getImage*", (request) => getImageHandler(request));
+  r.get(".*/api/getImage*", (request) => getImageHandler(request));
 
-  r.get(".*/search", (request) => searchHandler(request, "Search"));
+  r.get(".*/api/search", (request) => searchHandler(request, "Search"));
 
-  r.get("/.*", () => handleAssetEvent(event));
+  // r.get("/.*", () => handleAssetEvent(event));
 
-  const resp = await r.route(request);
+  let resp = await r.route(request);
+
+  if (resp === false) {
+    resp = await handleAssetEvent(event);
+  }
   return resp;
 }

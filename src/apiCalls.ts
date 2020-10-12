@@ -12,7 +12,7 @@ const getOptions = (opts: any) => ({
 
 const Auth = {
   currentSession: function () {
-    return fetch("./whoami", getOptions({ method: "GET" }));
+    return fetch("./api/whoami", getOptions({ method: "GET" }));
   },
   signOut: function () {
     sessionStorage.setItem(CUSTOMER_ID, "");
@@ -20,7 +20,7 @@ const Auth = {
   },
   signIn: async function (email: string, password: string) {
     const res = await fetch(
-      "./signin",
+      "./api/signin",
       getOptions({
         method: "POST",
         body: JSON.stringify({ username: email, password }),
@@ -33,7 +33,7 @@ const Auth = {
   },
   signUp: function (email: string, password: string) {
     return fetch(
-      "./signup",
+      "./api/signup",
       getOptions({
         method: "POST",
         body: JSON.stringify({ username: email, password }),
@@ -47,26 +47,26 @@ const Auth = {
 
 const API = {
   get: async function (key: string, path: string, extra: any) {
-    const res = await fetch(`.${path}`, getOptions({ method: "GET" }));
+    const res = await fetch(`./api${path}`, getOptions({ method: "GET" }));
     return res.json();
   },
   post: async function (key: string, path: string, data: any) {
     const res = await fetch(
-      `.${path}`,
+      `./api${path}`,
       getOptions({ method: "POST", body: JSON.stringify(data.body) })
     );
     return res.json();
   },
   put: async function (key: string, path: string, data: any) {
     const res = await fetch(
-      `.${path}`,
+      `./api${path}`,
       getOptions({ method: "PUT", body: JSON.stringify(data.body) })
     );
     return res.json();
   },
   del: async function (key: string, path: string, data: any) {
     const res = await fetch(
-      `.${path}`,
+      `./api${path}`,
       getOptions({ method: "DELETE", body: JSON.stringify(data.body) })
     );
   },

@@ -90,13 +90,15 @@ class Router {
       return route.handler(req)
     }
 
-    return new Response('resource not found', {
-      status: 404,
-      statusText: 'not found',
-      headers: {
-        'content-type': 'text/plain',
-      },
-    })
+    return false;
+
+    // return new Response('resource not found', {
+    //   status: 404,
+    //   statusText: 'not found',
+    //   headers: {
+    //     'content-type': 'text/plain',
+    //   },
+    // })
   }
 
   /**
