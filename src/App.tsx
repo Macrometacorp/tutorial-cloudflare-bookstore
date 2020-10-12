@@ -23,8 +23,8 @@ class App extends Component<AppProps, AppState> {
     super(props);
 
     this.state = {
-      isAuthenticated: true,
-      isAuthenticating: false,
+      isAuthenticated: false,
+      isAuthenticating: true,
     };
 
     document.title = "Bookstore Demo";

@@ -11,8 +11,13 @@ const getOptions = (opts: any) => ({
 });
 
 const Auth = {
-  currentSession: function () {
-    return fetch("./whoami", getOptions({ method: "GET" }));
+  currentSession: async function () {
+    const res = await fetch("./whoami", getOptions({ method: "GET" }));
+    if (res.status === 200) {
+      return true;
+    }
+    const body = await res.json();
+    throw body.message;
   },
   signOut: function () {
     sessionStorage.setItem(CUSTOMER_ID, "");

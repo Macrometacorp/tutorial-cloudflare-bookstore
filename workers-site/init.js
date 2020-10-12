@@ -251,6 +251,7 @@ const COLLECTIONS = [
   { name: "OrdersTable", data: [] },
   { name: "CartTable", data: [] },
   { name: "UsersTable", data: [] },
+  { name: "BestsellersTable", data: [] },
 ];
 
 const kvCollections = [

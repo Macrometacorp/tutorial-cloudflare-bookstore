@@ -105,7 +105,7 @@ const optionsObj = {
 const client = new jsc8({
   url: "https://abhishek.eng3.macrometa.io",
   apiKey:
-    "demo.cloudflare.2lcagsrrw0DPLBI3GFpFYPVPVxJUsUhxJjNqOyOy2kErc197oD3brnhi0BUNVEvxcd6f2d",
+    "demo.cloudflare.0lUyiKlvlPSdp04FFPvlUkQBhhKCGlK75dlEeLKIax5KMXsuoqAjCv36DDgf5e470de24a",
   agent: fetch,
 });
 
@@ -238,7 +238,7 @@ async function signinHandler(request) {
 
 async function whoAmIHandler(request) {
   const customerId = getCustomerId(request);
-  let message = "Not logged In";
+  let message = "No current user";
   let status = 500;
   if (customerId !== "null" && customerId) {
     message = customerId;
