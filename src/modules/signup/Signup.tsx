@@ -117,37 +117,38 @@ export default class Signup extends React.Component<SignupProps, SignupState> {
   };
 
   showConfirmationForm = () => {
-    if (this.state.redirect) return <Redirect to="/" />;
+    // if (this.state.redirect) 
+    return <Redirect to="/" />;
 
-    return (
-      <form onSubmit={this.onConfirm}>
-        <FormGroup controlId="confirmationCode">
-          <ControlLabel>Confirmation code</ControlLabel>
-          <FormControl
-            name="code"
-            type="tel"
-            bsSize="large"
-            value={this.state.confirmationCode}
-            onChange={this.onConfirmationCodeChange}
-          />
-          <FormControl.Feedback />
-          <HelpBlock>
-            A confirmation code will be sent to the email address provided
-          </HelpBlock>
-        </FormGroup>
-        <Button
-          block
-          bsSize="large"
-          type="submit"
-          disabled={this.state.confirmationCodeValid === "success"}
-        >
-          {this.state.loading && (
-            <Glyphicon glyph="refresh" className="spinning" />
-          )}
-          Confirm
-        </Button>
-      </form>
-    );
+    // return (
+    //   <form onSubmit={this.onConfirm}>
+    //     <FormGroup controlId="confirmationCode">
+    //       <ControlLabel>Confirmation code</ControlLabel>
+    //       <FormControl
+    //         name="code"
+    //         type="tel"
+    //         bsSize="large"
+    //         value={this.state.confirmationCode}
+    //         onChange={this.onConfirmationCodeChange}
+    //       />
+    //       <FormControl.Feedback />
+    //       <HelpBlock>
+    //         A confirmation code will be sent to the email address provided
+    //       </HelpBlock>
+    //     </FormGroup>
+    //     <Button
+    //       block
+    //       bsSize="large"
+    //       type="submit"
+    //       disabled={this.state.confirmationCodeValid === "success"}
+    //     >
+    //       {this.state.loading && (
+    //         <Glyphicon glyph="refresh" className="spinning" />
+    //       )}
+    //       Confirm
+    //     </Button>
+    //   </form>
+    // );
   };
 
   showSignupForm = () => {
