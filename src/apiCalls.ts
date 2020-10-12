@@ -10,34 +10,41 @@ const getOptions = (opts: any) => ({
   headers: { "X-Customer-Id": getCustomerId() },
 });
 
+const fetchWrapper = async (url: string, options: object) => {
+  const res = await fetch(url, options);
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw res;
+  }
+};
+
 const Auth = {
   currentSession: async function () {
-    const res = await fetch("./whoami", getOptions({ method: "GET" }));
-    if (res.status === 200) {
-      return true;
-    }
-    const body = await res.json();
-    throw body.message;
+    return await fetchWrapper("./whoami", getOptions({ method: "GET" }));
   },
   signOut: function () {
     sessionStorage.setItem(CUSTOMER_ID, "");
     return true;
   },
   signIn: async function (email: string, password: string) {
-    const res = await fetch(
-      "./signin",
-      getOptions({
-        method: "POST",
-        body: JSON.stringify({ username: email, password }),
-      })
-    );
-    const data = await res.json();
-    const customerId = data.message[0];
-    setCustomerId(customerId);
-    return true;
+    try {
+      const data = await fetchWrapper(
+        "./signin",
+        getOptions({
+          method: "POST",
+          body: JSON.stringify({ username: email, password }),
+        })
+      );
+      const customerId = data.message[0];
+      setCustomerId(customerId);
+    } catch (e) {
+      console.error(e);
+      return Promise.reject(e);
+    }
   },
   signUp: function (email: string, password: string) {
-    return fetch(
+    return fetchWrapper(
       "./signup",
       getOptions({
         method: "POST",
@@ -52,25 +59,22 @@ const Auth = {
 
 const API = {
   get: async function (key: string, path: string, extra: any) {
-    const res = await fetch(`.${path}`, getOptions({ method: "GET" }));
-    return res.json();
+    return await fetchWrapper(`.${path}`, getOptions({ method: "GET" }));
   },
   post: async function (key: string, path: string, data: any) {
-    const res = await fetch(
+    return await await fetchWrapper(
       `.${path}`,
       getOptions({ method: "POST", body: JSON.stringify(data.body) })
     );
-    return res.json();
   },
   put: async function (key: string, path: string, data: any) {
-    const res = await fetch(
+    return await fetchWrapper(
       `.${path}`,
       getOptions({ method: "PUT", body: JSON.stringify(data.body) })
     );
-    return res.json();
   },
   del: async function (key: string, path: string, data: any) {
-    const res = await fetch(
+    return await fetchWrapper(
       `.${path}`,
       getOptions({ method: "DELETE", body: JSON.stringify(data.body) })
     );
