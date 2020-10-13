@@ -254,6 +254,42 @@ const COLLECTIONS = [
   { name: "BestsellersTable", data: [] },
 ];
 
+const UPDATE_BESTSELLER_APP_DEFINITION = `@App:name("UpdateBestseller")
+@App:description("Updates BestsellerTable when a new order comes in the OrdersTable")
+
+define function getBookQuantity[javascript] return int {
+    const prevQuantity = arguments[0];
+    const nextQuantity = arguments[1];
+    
+    let newQuantity = nextQuantity;
+    if(prevQuantity){
+        newQuantity = prevQuantity + nextQuantity;
+    }
+    return newQuantity;
+};
+
+@source(type='c8db', collection='OrdersTable', @map(type='passThrough'))
+define stream OrdersTable (_json string);
+
+@sink(type='c8streams', stream='BestsellerIntermediateStream', @map(type='json'))
+define stream BestsellerIntermediateStream (bookId string, quantity int);
+
+@store(type = 'c8db', collection='BestsellersTable')
+define table BestsellersTable (_key string, quantity int);
+
+select json:getString(jsonElement, '$.bookId') as bookId, json:getInt(jsonElement, '$.quantity') as quantity
+from OrdersTable#json:tokenizeAsObject(_json, "$.books[*]")
+insert into BestsellerIntermediateStream;
+
+select next.bookId as _key, getBookQuantity(prev.quantity, next.quantity) as quantity
+from BestsellerIntermediateStream as next
+left outer join BestsellersTable as prev
+on next.bookId == prev._key
+update or insert into BestsellersTable
+set BestsellersTable.quantity = quantity, BestsellersTable._key = _key
+on BestsellersTable._key == _key;
+`;
+
 const kvCollections = [
   {
     name: "ImagesKVTable",
