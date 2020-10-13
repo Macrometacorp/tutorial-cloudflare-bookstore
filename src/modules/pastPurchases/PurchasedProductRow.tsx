@@ -54,7 +54,7 @@ export class PurchasedProductRow extends React.Component<PurchasedProductRowProp
       <div className="white-box">
         <div className="media">
           <div className="media-left media-middle">
-            <img className="media-object product-thumb" src={`./getImage?bookId=${this.state.book["_key"]}`} alt={`${this.state.book.name} covers`} />
+            <img className="media-object product-thumb" src={`./api/getImage?bookId=${this.state.book["_key"]}`} alt={`${this.state.book.name} covers`} />
           </div>
           <div className="media-body">
             <h3 className="media-heading">{this.state.book.name}

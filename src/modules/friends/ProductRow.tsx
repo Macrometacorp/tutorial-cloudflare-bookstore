@@ -41,7 +41,7 @@ export class ProductRow extends React.Component<
           <div className="media-left media-middle no-padding">
             <img
               className="product-thumb border"
-              src={`./getImage?bookId=${this.state.book["_key"]}`}
+              src={`./api/getImage?bookId=${this.state.book["_key"]}`}
               alt={`${this.state.book.name} cover`}
             />
           </div>

@@ -11,7 +11,8 @@ const getOptions = (opts: any) => ({
 });
 
 const fetchWrapper = async (url: string, options: object) => {
-  const res = await fetch(url, options);
+  const apiUrl = `./api${url}`;
+  const res = await fetch(apiUrl, options);
   if (res.ok) {
     return res.json();
   } else {
@@ -21,7 +22,7 @@ const fetchWrapper = async (url: string, options: object) => {
 
 const Auth = {
   currentSession: async function () {
-    return await fetchWrapper("./whoami", getOptions({ method: "GET" }));
+    return await fetchWrapper("/whoami", getOptions({ method: "GET" }));
   },
   signOut: function () {
     sessionStorage.setItem(CUSTOMER_ID, "");
@@ -30,7 +31,7 @@ const Auth = {
   signIn: async function (email: string, password: string) {
     try {
       const data = await fetchWrapper(
-        "./signin",
+        "/signin",
         getOptions({
           method: "POST",
           body: JSON.stringify({ username: email, password }),
@@ -45,7 +46,7 @@ const Auth = {
   },
   signUp: function (email: string, password: string) {
     return fetchWrapper(
-      "./signup",
+      "/signup",
       getOptions({
         method: "POST",
         body: JSON.stringify({ username: email, password }),
@@ -59,23 +60,23 @@ const Auth = {
 
 const API = {
   get: async function (key: string, path: string, extra: any) {
-    return await fetchWrapper(`.${path}`, getOptions({ method: "GET" }));
+    return await fetchWrapper(path, getOptions({ method: "GET" }));
   },
   post: async function (key: string, path: string, data: any) {
     return await await fetchWrapper(
-      `.${path}`,
+      path,
       getOptions({ method: "POST", body: JSON.stringify(data.body) })
     );
   },
   put: async function (key: string, path: string, data: any) {
     return await fetchWrapper(
-      `.${path}`,
+      path,
       getOptions({ method: "PUT", body: JSON.stringify(data.body) })
     );
   },
   del: async function (key: string, path: string, data: any) {
     return await fetchWrapper(
-      `.${path}`,
+      path,
       getOptions({ method: "DELETE", body: JSON.stringify(data.body) })
     );
   },
