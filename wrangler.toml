@@ -4,7 +4,7 @@ account_id = "b3dad22670b88424da9afddc967218a2"
 workers_dev = true
 route = ""
 zone_id = ""
-vars = { ENVIRONMENT="dev", C8_URL="https://abhishek.eng3.macrometa.io", C8_API_KEY="demo.cloudflare.10DBpDolYerpcD6pGF3tcAEJrin7rZChNBjpYT0b2JjABN9JMULSdMqWVdDMRJ0V769839" }
+vars = { DC_LIST="abhishek-blr1", C8_URL="https://abhishek.eng3.macrometa.io", C8_API_KEY="demo.cloudflare.10DBpDolYerpcD6pGF3tcAEJrin7rZChNBjpYT0b2JjABN9JMULSdMqWVdDMRJ0V769839" }
 [site]
 bucket = "./build"
 entry-point = "workers-site"

@@ -250,45 +250,32 @@ const COLLECTIONS = [
   },
   { name: "OrdersTable", data: [] },
   { name: "CartTable", data: [] },
-  { name: "UsersTable", data: [] },
-  { name: "BestsellersTable", data: [] },
+  {
+    name: "UsersTable",
+    data: [
+      {
+        customerId: "56b83d81-940a-4dd4-c2f4-420c41deeca7",
+        password: "�y|�\u0018�-�d�\u0007�]?�v#\u0004�\u0006=S,�\\^ר�O",
+        username: "dummy.user@macrometa.co",
+      },
+      {
+        customerId: "56b83d81-512a-4dd4-c2f4-310c41deeca7",
+        password: "�y|�\u0018�-�d�\u0007�]?�v#\u0004�\u0006=S,�\\^ר�O",
+        username: "user.dummy@macrometa.co",
+      },
+    ],
+  },
+  {
+    name: "BestsellersTable",
+    data: [
+      { _key: "b1", quantity: 1 },
+      { _key: "b5", quantity: 1 },
+      { _key: "b9", quantity: 1 },
+      { _key: "b13", quantity: 1 },
+      { _key: "b17", quantity: 1 },
+    ],
+  },
 ];
-
-const UPDATE_BESTSELLER_APP_DEFINITION = `@App:name("UpdateBestseller")
-@App:description("Updates BestsellerTable when a new order comes in the OrdersTable")
-
-define function getBookQuantity[javascript] return int {
-    const prevQuantity = arguments[0];
-    const nextQuantity = arguments[1];
-    
-    let newQuantity = nextQuantity;
-    if(prevQuantity){
-        newQuantity = prevQuantity + nextQuantity;
-    }
-    return newQuantity;
-};
-
-@source(type='c8db', collection='OrdersTable', @map(type='passThrough'))
-define stream OrdersTable (_json string);
-
-@sink(type='c8streams', stream='BestsellerIntermediateStream', @map(type='json'))
-define stream BestsellerIntermediateStream (bookId string, quantity int);
-
-@store(type = 'c8db', collection='BestsellersTable')
-define table BestsellersTable (_key string, quantity int);
-
-select json:getString(jsonElement, '$.bookId') as bookId, json:getInt(jsonElement, '$.quantity') as quantity
-from OrdersTable#json:tokenizeAsObject(_json, "$.books[*]")
-insert into BestsellerIntermediateStream;
-
-select next.bookId as _key, getBookQuantity(prev.quantity, next.quantity) as quantity
-from BestsellerIntermediateStream as next
-left outer join BestsellersTable as prev
-on next.bookId == prev._key
-update or insert into BestsellersTable
-set BestsellersTable.quantity = quantity, BestsellersTable._key = _key
-on BestsellersTable._key == _key;
-`;
 
 const kvCollections = [
   {
@@ -466,6 +453,44 @@ const kvCollections = [
   },
 ];
 
+const STREAM_APP_NAME = "UpdateBestseller";
+
+const UPDATE_BESTSELLER_APP_DEFINITION = `@App:name("${STREAM_APP_NAME}")
+@App:description("Updates BestsellerTable when a new order comes in the OrdersTable")
+
+define function getBookQuantity[javascript] return int {
+    const prevQuantity = arguments[0];
+    const nextQuantity = arguments[1];
+    
+    let newQuantity = nextQuantity;
+    if(prevQuantity){
+        newQuantity = prevQuantity + nextQuantity;
+    }
+    return newQuantity;
+};
+
+@source(type='c8db', collection='OrdersTable', @map(type='passThrough'))
+define stream OrdersTable (_json string);
+
+@sink(type='c8streams', stream='BestsellerIntermediateStream', @map(type='json'))
+define stream BestsellerIntermediateStream (bookId string, quantity int);
+
+@store(type = 'c8db', collection='BestsellersTable')
+define table BestsellersTable (_key string, quantity int);
+
+select json:getString(jsonElement, '$.bookId') as bookId, json:getInt(jsonElement, '$.quantity') as quantity
+from OrdersTable#json:tokenizeAsObject(_json, "$.books[*]")
+insert into BestsellerIntermediateStream;
+
+select next.bookId as _key, getBookQuantity(prev.quantity, next.quantity) as quantity
+from BestsellerIntermediateStream as next
+left outer join BestsellersTable as prev
+on next.bookId == prev._key
+update or insert into BestsellersTable
+set BestsellersTable.quantity = quantity, BestsellersTable._key = _key
+on BestsellersTable._key == _key;
+`;
+
 async function init(client) {
   for (collection of COLLECTIONS) {
     const { name, data } = collection;
@@ -508,6 +533,32 @@ async function init(client) {
       console.log(`KV Collection ${name} already exists. Skipping creation.`);
     }
   }
+
+  const dcList = DC_LIST.split(",");
+  console.log("Checking stream app", JSON.stringify(dcList));
+  try {
+    const allStreamAppsRes = await client.retrieveStreamApp();
+    const existingStreamApps = allStreamAppsRes.streamApps;
+    const streamAppExists = existingStreamApps.find(
+      (streamApp) => streamApp.name === STREAM_APP_NAME
+    );
+    if (!streamAppExists) {
+      await client.createStreamApp(dcList, UPDATE_BESTSELLER_APP_DEFINITION);
+      console.log(`Streamapp ${STREAM_APP_NAME} created.`);
+      const app = client.streamApp(STREAM_APP_NAME);
+      await app.activateStreamApplication(true);
+      console.log(`Streamapp ${STREAM_APP_NAME} activated.`);
+    } else {
+      console.log(
+        `Streamapp ${STREAM_APP_NAME} already exists. Skipping creation.`
+      );
+    }
+  } catch (e) {
+    console.log("Error!!!");
+    console.log(e);
+  }
 }
 
 module.exports = init;
+
+// curl 'https://bookstore.macrometadev.workers.dev/api/init'   -H 'authority: bookstore.macrometadev.workers.dev'   -H 'sec-ch-ua: "Chromium";v="86", "\"Not\\A;Brand";v="99", "Google Chrome";v="86"'   -H 'x-customer-id: null'   -H 'sec-ch-ua-mobile: ?0'   -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'   -H 'content-type: text/plain;charset=UTF-8'   -H 'accept: */*'   -H 'origin: https://bookstore.macrometadev.workers.dev'   -H 'sec-fetch-site: same-origin'   -H 'sec-fetch-mode: cors'   -H 'sec-fetch-dest: empty'   -H 'referer: https://bookstore.macrometadev.workers.dev/signup'   -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8'   -H 'cookie: __cfduid=de7d15f3918fe96a07cf5cedffdecba081601555750'   --data-binary '{}'   --compressed
