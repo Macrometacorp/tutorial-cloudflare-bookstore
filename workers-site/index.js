@@ -103,9 +103,8 @@ const optionsObj = {
 };
 
 const client = new jsc8({
-  url: "https://abhishek.eng3.macrometa.io",
-  apiKey:
-    "demo.cloudflare.10DBpDolYerpcD6pGF3tcAEJrin7rZChNBjpYT0b2JjABN9JMULSdMqWVdDMRJ0V769839",
+  url: C8_URL,
+  apiKey: C8_API_KEY,
   agent: fetch,
 });
 
