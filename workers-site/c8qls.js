@@ -86,8 +86,11 @@ const queries = (queryName, bindValue) => {
 
     case "GetBestSellers":
       queryObj = {
-        query:
-          "FOR book in BestsellersTable SORT book.quantity DESC LIMIT 20 return book._key",
+        // query:
+        //   "FOR book in BestsellersTable SORT book.quantity DESC LIMIT 20 return book._key",
+        query: `FOR bestseller in BestsellersTable
+        FOR book in BooksTable
+            FILTER bestseller._key == book._key SORT bestseller.quantity DESC LIMIT 20 RETURN book`,
         bindVars: {},
       };
       break;

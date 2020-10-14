@@ -8,6 +8,7 @@ import "../../common/styles/productRow.css";
 
 interface ProductRowProps {
   bookId: string;
+  book: Book;
 }
 
 export interface Book {
@@ -37,8 +38,8 @@ export class ProductRow extends React.Component<
 
   async componentDidMount() {
     try {
-      const book = await this.getBook();
-      this.setState({ book: book[0] });
+      // const book = await this.getBook();
+      this.setState({ book: this.props.book });
     } catch (e) {
       console.error(e);
     }
@@ -57,7 +58,7 @@ export class ProductRow extends React.Component<
           <div className="media-left media-middle no-padding">
             <img
               className="media-object product-thumb"
-              src={this.state.book["_key"]}
+              src={`./api/getImage?bookId=${this.state.book["_key"]}`}
               alt={`${this.state.book.name} cover`}
             />
           </div>
@@ -71,7 +72,8 @@ export class ProductRow extends React.Component<
             <p>
               <small>{this.state.book.category}</small>
             </p>
-            <FriendRecommendations bookId={this.props.bookId} />
+            {/*ABHISHEK*/}
+            {/* <FriendRecommendations bookId={this.props.bookId} /> */}
             <div>
               Rating
               <AddToCart
