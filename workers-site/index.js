@@ -252,9 +252,14 @@ async function whoAmIHandler(request) {
 async function getImageHandler(request) {
   const queryParam = getLastPathParam(request);
   const bookId = queryParam.split("?")[1].split("=")[1];
-  const res = await client.getValueForKey("ImagesKVTable", bookId);
-  const base64Img = res.value;
-  const response = new Response(decode(base64Img), {
+  // const res = await client.getValueForKey("ImagesKVTable", bookId);
+  // const base64Img = res.value;
+  // const response = new Response(decode(base64Img), {
+  //   headers: { "Content-Type": "image/jpeg" },
+  // });
+
+  const res = await BOOK_IMAGES.get(bookId, "arrayBuffer");
+  const response = new Response(res, {
     headers: { "Content-Type": "image/jpeg" },
   });
 

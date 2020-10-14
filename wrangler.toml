@@ -4,7 +4,10 @@ account_id = "b3dad22670b88424da9afddc967218a2"
 workers_dev = true
 route = ""
 zone_id = ""
-vars = { DC_LIST="abhishek-blr1", C8_URL="https://abhishek.eng3.macrometa.io", C8_API_KEY="demo.cloudflare.10DBpDolYerpcD6pGF3tcAEJrin7rZChNBjpYT0b2JjABN9JMULSdMqWVdDMRJ0V769839" }
+vars = { DC_LIST="abhishek-blr1", C8_URL="https://abhishek.eng3.macrometa.io", C8_API_KEY="abhishek_macrometa.io.cloudflare.sR1aQamexO5zz6dVXrolGP6rLbCiBf4ORyYWOecnt6K7bW6PYgplV8rHFbVttIxs76a056" }
+kv-namespaces = [
+    { binding = "BOOK_IMAGES", id = "1fcd1c0a7aae4c958bde0606dd090d95" }
+]
 [site]
 bucket = "./build"
 entry-point = "workers-site"
