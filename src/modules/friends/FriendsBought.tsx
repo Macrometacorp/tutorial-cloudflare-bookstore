@@ -22,14 +22,17 @@ export class FriendsBought extends React.Component<FriendsBoughtProps, FriendsBo
   }
 
   componentDidMount() {
-    API.get("recommendations", "/recommendations", null)
-      .then(response => {
+    // API.get("recommendations", "/recommendations", null)
+    //   .then(response => {
+    //     this.setState({
+    //       recommendations: response,
+    //       isLoading: false
+    //     });
+    //   })
+    //   .catch(error => console.error(error));
         this.setState({
-          recommendations: response,
           isLoading: false
         });
-      })
-      .catch(error => console.error(error));
   }
 
   render() {

@@ -35,7 +35,8 @@ export class CheckoutForm extends React.Component<CheckoutFormProps, CheckoutFor
 
   async componentDidMount() {
     try {
-      const orders = await this.listOrdersInCart();
+      let orders = await this.listOrdersInCart();
+      orders = orders.map((orderObj: any) => orderObj.order);
       this.setState({
         orders: orders
       });

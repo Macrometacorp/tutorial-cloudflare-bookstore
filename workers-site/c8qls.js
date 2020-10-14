@@ -34,15 +34,19 @@ const queries = (queryName, bindValue) => {
 
     case "ListItemsInCart":
       queryObj = {
-        query:
-          "FOR item IN CartTable FILTER item.customerId == @customerId RETURN item",
+        // query:
+        //   "FOR item IN CartTable FILTER item.customerId == @customerId RETURN item",
+        query: `FOR item IN CartTable FILTER item.customerId == @customerId
+        FOR book in BooksTable FILTER book._key == item.bookId
+            RETURN {order: item, book: book}`,
         bindVars: bindValue,
       };
       break;
     case "AddToCart":
       queryObj = {
-        query:
-          'INSERT {_key: CONCAT_SEPARATOR(":", @customerId, @bookId),customerId: @customerId, bookId: @bookId, quantity: @quantity, price: @price} INTO CartTable ',
+        query: `UPSERT { _key: CONCAT_SEPARATOR(":", @customerId, @bookId) } 
+          INSERT { _key: CONCAT_SEPARATOR(":", @customerId, @bookId),customerId: @customerId, bookId: @bookId, quantity: @quantity, price: @price } 
+          UPDATE { quantity: OLD.quantity + @quantity } IN CartTable`,
         bindVars: bindValue,
       };
       break;
@@ -56,7 +60,7 @@ const queries = (queryName, bindValue) => {
     case "RemoveFromCart":
       queryObj = {
         query:
-          'FOR item IN  CartTable REMOVE {_key: CONCAT_SEPARATOR(":", @customerId, @bookId)} IN CartTable',
+          'REMOVE {_key: CONCAT_SEPARATOR(":", @customerId, @bookId)} IN CartTable',
         bindVars: bindValue,
       };
       break;
@@ -71,15 +75,17 @@ const queries = (queryName, bindValue) => {
     case "ListOrders":
       queryObj = {
         query:
-          "FOR item IN OrdersTable FILTER item._key == @customerId RETURN item",
+          "FOR item IN OrdersTable FILTER item.customerId == @customerId RETURN item",
         bindVars: bindValue,
       };
       break;
     case "Checkout":
       queryObj = {
         query: `LET items = (FOR item IN CartTable FILTER item.customerId == @customerId RETURN item)
-      FOR item IN items INSERT {_key: @customerId, books: items, orderId: @orderId, orderDate: @orderDate} INTO OrdersTable
-      FOR itemToRemove IN items REMOVE {_key: itemToRemove._key} IN CartTable`,
+        LET books = (FOR item in items
+            FOR book in BooksTable FILTER book._key == item.bookId return book)
+        INSERT {customerId: @customerId, books: books, orderId: @orderId, orderDate: @orderDate} INTO OrdersTable
+        FOR item IN items REMOVE item IN CartTable`,
         bindVars: bindValue,
       };
       break;

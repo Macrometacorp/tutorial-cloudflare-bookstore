@@ -12,7 +12,7 @@ interface PurchasedProductRowProps {
 }
 
 interface PurchasedProductRowState {
-  book: Book | undefined;
+  book: any;
 }
 
 export class PurchasedProductRow extends React.Component<PurchasedProductRowProps, PurchasedProductRowState> {
@@ -26,16 +26,16 @@ export class PurchasedProductRow extends React.Component<PurchasedProductRowProp
 
   async componentDidMount() {
     try {
-      const book = await this.getBook(this.props.order);
-      this.setState({ book: book[0] });
+      // const book = await this.getBook(this.props.order);
+      this.setState({ book: this.props.order });
     } catch (e) {
       console.error(e);
     }
   }
 
-  getBook(order: Order) {
-    return API.get("books", `/books/${order.bookId}`, null);
-  }
+  // getBook(order: Order) {
+  //   return API.get("books", `/books/${order.bookId}`, null);
+  // }
 
   render() {
     if (!this.state.book) {

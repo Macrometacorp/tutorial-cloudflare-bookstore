@@ -13,7 +13,8 @@ export interface Order {
 }
 
 interface CartProductRowProps {
-  order: Order;
+  order: Order | any;
+  book: any;
   calculateTotal: () => void;
 }
 
@@ -37,16 +38,17 @@ export class CartProductRow extends React.Component<
 
   async componentDidMount() {
     try {
-      const book = await this.getBook(this.props.order);
-      this.setState({ book: book[0] });
+      // const book = this.getBook(this.props.order);
+      const book = this.props.book;
+      this.setState({ book });
     } catch (e) {
       console.error(e);
     }
   }
 
-  getBook(order: Order) {
-    return API.get("books", `/books/${order.bookId}`, null);
-  }
+  // getBook(order: any) {
+  //   return API.get("books", `/books/${order.bookId}`, null);
+  // }
 
   onRemove = async () => {
     this.setState({ removeLoading: true });

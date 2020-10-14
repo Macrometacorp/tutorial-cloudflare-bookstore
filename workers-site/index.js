@@ -152,7 +152,6 @@ async function booksHandler(request, c8qlKey) {
 
 async function cartHandler(request, c8qlKey) {
   const customerId = getCustomerId(request);
-  // ABHISHEK: re-route to signup/signin?
   let body = { error: true, code: 400, message: "Customer Id not provided" };
   if (customerId) {
     let bindValue = { customerId };
@@ -176,7 +175,7 @@ async function ordersHandler(request, c8qlKey) {
     if (c8qlKey === "Checkout") {
       // ABHISHEK: aws has books[] also.
       // I don't see the point as all items in the cart have to be moved
-      bindValue = { ...bindValue, orderId: uuid(), orderDate: Date.now() };
+      bindValue = { ...bindValue, orderId: Date.now().toString(), orderDate: Date.now() };
     }
     body = await executeQuery(c8qlKey, bindValue);
   }

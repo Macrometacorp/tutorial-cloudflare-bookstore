@@ -20,7 +20,8 @@ class FriendRecommendations extends React.Component<FriendRecommendationsProps, 
   }
 
   getFriends = () => {
-    return API.get("recommendations", `/recommendations/${this.props.bookId}`, null);
+    return [];
+    // return API.get("recommendations", `/recommendations/${this.props.bookId}`, null);
   }
 
   async componentDidMount() {
