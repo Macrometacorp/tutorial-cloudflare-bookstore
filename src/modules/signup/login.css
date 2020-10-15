@@ -14,7 +14,7 @@
 }
 
 .btn-default{
-	background-color: #F69827 !important;
+	background-color: #2EADDE !important;
 	border-radius: 0 !important;
 	color: #fff !important;
 	border: 0;
@@ -22,6 +22,6 @@
 }
 
 .btn-default.disabled, .btn-default[disabled], fieldset[disabled] .btn-default, .btn-default.disabled:hover, .btn-default[disabled]:hover, fieldset[disabled] .btn-default:hover, .btn-default.disabled:focus, .btn-default[disabled]:focus, fieldset[disabled] .btn-default:focus, .btn-default.disabled.focus, .btn-default[disabled].focus, fieldset[disabled] .btn-default.focus, .btn-default.disabled:active, .btn-default[disabled]:active, fieldset[disabled] .btn-default:active, .btn-default.disabled.active, .btn-default[disabled].active, fieldset[disabled] .btn-default.active{
-		background-color: #F69827 !important;
+		background-color: #2EADDE !important;
 		opacity: 1.00 !important;
 }
