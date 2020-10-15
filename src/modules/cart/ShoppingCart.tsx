@@ -50,7 +50,6 @@ export default class ShoppingCart extends Component<
   }
 
   getOrderTotal = async (shouldMakeCall: boolean = false) => {
-
     let ordersInCart = this.state.orders;
 
     if (shouldMakeCall) {
@@ -61,8 +60,9 @@ export default class ShoppingCart extends Component<
     }
 
     let total = ordersInCart
-      .reduce((total: number, book: Order) => {
-        return total + book.price * book.quantity;
+      .reduce((total: number, orderObj: { order: Order }) => {
+        const { order } = orderObj;
+        return total + order.price * order.quantity;
       }, 0)
       .toFixed(2);
 
@@ -94,7 +94,7 @@ export default class ShoppingCart extends Component<
             <CartProductRow
               order={order.order}
               book={order.book}
-              key={order.bookId}
+              key={order.order.bookId}
               calculateTotal={() => this.getOrderTotal(true)}
             />
           ))}
