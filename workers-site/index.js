@@ -196,7 +196,19 @@ async function bestSellersHandler(request, c8qlKey) {
   return new Response(JSON.stringify(result), optionsObj);
 }
 
-async function recommendationsHandler(request, c8qlKey) {}
+async function recommendationsHandler(request, c8qlKey) {
+  const customerId = getCustomerId(request);
+  let body = { error: true, code: 400, message: "Customer Id not provided" };
+  if (customerId) {
+    let bindValue = { customerId };
+    if (c8qlKey === "GetRecommendationsByBook") {
+      const bookId = getLastPathParam(request);
+      bindValue = { ...bindValue, bookId };
+    }
+    body = await executeQuery(c8qlKey, bindValue);
+  }
+  return new Response(JSON.stringify(body), optionsObj);
+}
 
 async function searchHandler(request, c8qlKey) {}
 
@@ -313,7 +325,7 @@ async function handleEvent(event) {
   r.get(".*/api/recommendations", (request) =>
     recommendationsHandler(request, "GetRecommendations")
   );
-  r.get(".*/api/recommendations/r[0-9]+", (request) =>
+  r.get(".*/api/recommendations/b[0-9]+", (request) =>
     recommendationsHandler(request, "GetRecommendationsByBook")
   );
 

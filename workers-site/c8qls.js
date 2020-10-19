@@ -122,10 +122,24 @@ const queries = (queryName, bindValue) => {
       break;
 
     case "GetRecommendations":
-      queryObj = { query: "", bindVars: {} };
+      queryObj = {
+        query: `LET userId = first(FOR user in UsersTable FILTER user.customerId == @customerId return user._id)
+        FOR user IN ANY userId friend
+            FOR books IN OUTBOUND user purchased
+            RETURN books`,
+        bindVars: bindValue,
+      };
       break;
     case "GetRecommendationsByBook":
-      queryObj = { query: "", bindVars: {} };
+      queryObj = {
+        query: `LET userId = first(FOR user in UsersTable FILTER user.customerId == @customerId return user._id)
+      LET bookId = CONCAT("BooksTable/",@bookId)
+      FOR friendsPurchased IN INBOUND bookId purchased
+          FOR user IN ANY userId friend
+              FILTER user._key == friendsPurchased._key
+                  RETURN user`,
+        bindVars: bindValue,
+      };
       break;
 
     case "Search":

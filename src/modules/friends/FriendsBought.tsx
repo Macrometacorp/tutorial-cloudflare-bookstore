@@ -22,17 +22,14 @@ export class FriendsBought extends React.Component<FriendsBoughtProps, FriendsBo
   }
 
   componentDidMount() {
-    // API.get("recommendations", "/recommendations", null)
-    //   .then(response => {
-    //     this.setState({
-    //       recommendations: response,
-    //       isLoading: false
-    //     });
-    //   })
-    //   .catch(error => console.error(error));
+    API.get("recommendations", "/recommendations", null)
+      .then(response => {
         this.setState({
+          recommendations: response,
           isLoading: false
         });
+      })
+      .catch(error => console.error(error));
   }
 
   render() {
@@ -44,7 +41,7 @@ export class FriendsBought extends React.Component<FriendsBoughtProps, FriendsBo
           <h3>Books your friends have bought</h3>
         </div>
         {this.state.recommendations.slice(0,5).map(recommendation =>
-          <ProductRow bookId={recommendation.bookId} key={recommendation.bookId} />
+          <ProductRow book={recommendation} bookId={recommendation._key} key={recommendation._key} />
         )}
       </div>
     );

@@ -7,6 +7,7 @@ import FriendRecommendations from "../../common/friendRecommendations/FriendReco
 import { Book } from "../bestSellers/BestSellerProductRow";
 
 interface ProductRowProps {
+  book: Book,
   bookId: string;
 }
 
@@ -27,9 +28,10 @@ export class ProductRow extends React.Component<
   }
 
   componentDidMount() {
-    API.get("books", `/books/${this.props.bookId}`, null)
-      .then((response) => this.setState({ book: response }))
-      .catch((error) => console.error(error));
+    this.setState({book: this.props.book})
+    // API.get("books", `/books/${this.props.bookId}`, null)
+    //   .then((response) => this.setState({ book: response }))
+    //   .catch((error) => console.error(error));
   }
 
   render() {

@@ -20,8 +20,7 @@ class FriendRecommendations extends React.Component<FriendRecommendationsProps, 
   }
 
   getFriends = () => {
-    return [];
-    // return API.get("recommendations", `/recommendations/${this.props.bookId}`, null);
+    return API.get("recommendations", `/recommendations/${this.props.bookId}`, null);
   }
 
   async componentDidMount() {
@@ -35,12 +34,12 @@ class FriendRecommendations extends React.Component<FriendRecommendationsProps, 
 
   render() {
     // No recommendations to show
-    if (!(this.state.friends[0] && this.state.friends[0].friendsPurchased && this.state.friends[0].friendsPurchased.length > 0)) {
+    if (!this.state.friends[0]) {
       return <div className="no-friends-padding" />
     }
     
-    const numFriendsPurchased = this.state.friends[0].friendsPurchased.length;
-    const friends = this.state.friends[0].friendsPurchased;
+    const numFriendsPurchased = this.state.friends.length;
+    const friends = this.state.friends;
     return (
       <div>
         <div>Friends who bought this book</div>
