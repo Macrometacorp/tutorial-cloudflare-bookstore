@@ -1,4 +1,3 @@
-// TODO: users collection for graph
 const COLLECTIONS = [
   {
     name: "BooksTable",
@@ -722,7 +721,40 @@ const COLLECTIONS = [
       },
     ],
   },
-  { name: "OrdersTable", data: [] },
+  {
+    name: "OrdersTable",
+    data: [
+      {
+        books: [
+          {
+            _id: "BooksTable/b2",
+            _key: "b2",
+            _rev: "_bR90GHu--C",
+            author: "Steve Doocy",
+            category: "Cookbooks",
+            name:
+              "The Happy in a Hurry Cookbook: 100-Plus Fast and Easy New Recipes That Taste Like Home",
+            price: 17.99,
+            rating: 4.6,
+          },
+          {
+            _id: "BooksTable/b3",
+            _key: "b3",
+            _rev: "_bR90GHy--_",
+            author: "Kristin Cavallari",
+            category: "Cookbooks",
+            name:
+              "True Comfort: More Than 100 Cozy Recipes Free of Gluten and Refined Sugar: A Gluten Free Cookbook",
+            price: 17.52,
+            rating: 4.8,
+          },
+        ],
+        customerId: "56b83d81-940a-4dd4-c2f4-420c41deeca7",
+        orderDate: 1603105787506,
+        _key: "1603105787506:56b83d81-940a-4dd4-c2f4-420c41deeca7",
+      },
+    ],
+  },
   { name: "CartTable", data: [] },
   {
     name: "UsersTable",
@@ -730,12 +762,12 @@ const COLLECTIONS = [
       {
         customerId: "56b83d81-940a-4dd4-c2f4-420c41deeca7",
         password: "�y|�\u0018�-�d�\u0007�]?�v#\u0004�\u0006=S,�\\^ר�O",
-        username: "dummy.user@macrometa.co",
+        _key: "john.d@macrometa.io",
       },
       {
         customerId: "56b83d81-512a-4dd4-c2f4-310c41deeca7",
         password: "�y|�\u0018�-�d�\u0007�]?�v#\u0004�\u0006=S,�\\^ר�O",
-        username: "user.dummy@macrometa.co",
+        _key: "harry.d@macrometa.io",
       },
     ],
   },
@@ -747,6 +779,31 @@ const COLLECTIONS = [
       { _key: "b9", quantity: 1 },
       { _key: "b13", quantity: 1 },
       { _key: "b17", quantity: 1 },
+    ],
+  },
+];
+
+const EDGE_COLLECTIONS = [
+  {
+    name: "friend",
+    data: [
+      {
+        _from: "UsersTable/harry.d@macrometa.io",
+        _to: "UsersTable/john.d@macrometa.io",
+      },
+    ],
+  },
+  {
+    name: "purchased",
+    data: [
+      {
+        _from: "UsersTable/john.d@macrometa.io",
+        _to: "BooksTable/b3",
+      },
+      {
+        _from: "UsersTable/john.d@macrometa.io",
+        _to: "BooksTable/b2",
+      },
     ],
   },
 ];
@@ -965,27 +1022,51 @@ set BestsellersTable.quantity = quantity, BestsellersTable._key = _key
 on BestsellersTable._key == _key;
 `;
 
+// ABHISHEK: init user's social graph
+
+const collectionHandler = async (client, collection, isEdge) => {
+  const { name, data } = collection;
+  const coll = isEdge ? client.edgeCollection(name) : client.collection(name);
+  // ABHISHEK: remove once fixed from jsc8
+  let exists;
+  try {
+    exists = await coll.exists();
+  } catch (e) {
+    exists = false;
+  }
+  // ABHISHEK: look into edge collection init
+  const prefix = `${isEdge ? "Edge " : ""}Collection ${name}`;
+  console.log(`${prefix} exists=${exists}`);
+  if (!exists) {
+    await client.createCollection(name, {}, isEdge);
+    console.log(`${prefix} created`);
+    if (Array.isArray(data) && data.length)
+      if (isEdge) {
+        for (edge of data) {
+          await coll.save(data);
+        }
+      } else {
+        await client.insertDocumentMany(name, data);
+      }
+    console.log(`Data inserted in ${prefix}`);
+  } else {
+    console.log(`${prefix} already exists. Skipping creation.`);
+  }
+  return coll;
+};
+
 async function init(client) {
   for (collection of COLLECTIONS) {
-    const { name, data } = collection;
-    const coll = client.collection(name);
+    await collectionHandler(client, collection, false);
+  }
 
-    // TODO: remove once fixed from jsc8
-    let exists = true;
+  for (edgeCollections of EDGE_COLLECTIONS) {
     try {
-      const exists = await coll.exists();
+      await collectionHandler(client, edgeCollection, true);
     } catch (e) {
-      exists = false;
-    }
-
-    if (!exists) {
-      await client.createCollection(name);
-      console.log(`Collection ${name} created`);
-      if (Array.isArray(data) && data.length)
-        await client.insertDocumentMany(name, data);
-      console.log(`Data inserted in ${name}`);
-    } else {
-      console.log(`Collection ${name} already exists. Skipping creation.`);
+      console.log("------------------");
+      console.log(JSON.stringify(e));
+      console.log("==================");
     }
   }
 

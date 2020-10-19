@@ -172,12 +172,21 @@ async function ordersHandler(request, c8qlKey) {
   let body = { error: true, code: 400, message: "Customer Id not provided" };
   if (customerId) {
     let bindValue = { customerId };
+    let orderDate = Date.now();
+    const orderId = `${orderDate.toString()}:${customerId}`;
+    let shouldUpdatePurchased = false;
     if (c8qlKey === "Checkout") {
-      // ABHISHEK: aws has books[] also.
-      // I don't see the point as all items in the cart have to be moved
-      bindValue = { ...bindValue, orderId: Date.now().toString(), orderDate: Date.now() };
+      bindValue = {
+        ...bindValue,
+        orderId,
+        orderDate,
+      };
+      shouldUpdatePurchased = true;
     }
     body = await executeQuery(c8qlKey, bindValue);
+    if (shouldUpdatePurchased && !body.error) {
+      await executeQuery("AddPurchased", { orderId });
+    }
   }
   return new Response(JSON.stringify(body), optionsObj);
 }
@@ -209,6 +218,10 @@ async function signupHandler(request) {
     passwordHash,
     customerId,
   });
+  if (!result.error) {
+    const res = await executeQuery("AddFriends", { username });
+  }
+
   const body = JSON.stringify(result);
   return new Response(body, optionsObj);
 }

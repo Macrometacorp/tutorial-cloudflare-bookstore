@@ -3,13 +3,21 @@ const queries = (queryName, bindValue) => {
   switch (queryName) {
     case "signup":
       queryObj = {
-        query: `INSERT {username: @username, password: @passwordHash, customerId: @customerId} INTO UsersTable`,
+        query: `INSERT {_key: @username, password: @passwordHash, customerId: @customerId} INTO UsersTable`,
+        bindVars: bindValue,
+      };
+      break;
+    case "AddFriends":
+      queryObj = {
+        query: `LET otherUsers = (FOR users in UsersTable FILTER users._key != @username RETURN users)
+        FOR user in otherUsers
+            INSERT { _from: CONCAT("UsersTable/",@username), _to: CONCAT("UsersTable/",user._key)  } INTO friend`,
         bindVars: bindValue,
       };
       break;
     case "signin":
       queryObj = {
-        query: `FOR user in UsersTable FILTER user.username == @username AND user.password == @passwordHash RETURN user.customerId`,
+        query: `FOR user in UsersTable FILTER user._key == @username AND user.password == @passwordHash RETURN user.customerId`,
         bindVars: bindValue,
       };
       break;
@@ -80,12 +88,24 @@ const queries = (queryName, bindValue) => {
       };
       break;
     case "Checkout":
+      /* ABHISHEK: add edge from user to book once checked out */
       queryObj = {
         query: `LET items = (FOR item IN CartTable FILTER item.customerId == @customerId RETURN item)
         LET books = (FOR item in items
             FOR book in BooksTable FILTER book._key == item.bookId return book)
-        INSERT {customerId: @customerId, books: books, orderId: @orderId, orderDate: @orderDate} INTO OrdersTable
+        INSERT {_key: @orderId, customerId: @customerId, books: books, orderDate: @orderDate} INTO OrdersTable
         FOR item IN items REMOVE item IN CartTable`,
+        bindVars: bindValue,
+      };
+      break;
+    case "AddPurchased":
+      queryObj = {
+        query: `LET order = first(FOR order in OrdersTable FILTER order._key == @orderId RETURN {customerId: order.customerId, books: order.books})
+        LET customerId = order.customerId
+        LET userId = first(FOR user IN UsersTable FILTER user.customerId == customerId RETURN user._id)
+        LET books = order.books
+        FOR book IN books
+            INSERT {_from: userId, _to: book._id} INTO purchased`,
         bindVars: bindValue,
       };
       break;
