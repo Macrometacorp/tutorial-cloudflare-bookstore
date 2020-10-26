@@ -143,7 +143,13 @@ const queries = (queryName, bindValue) => {
       break;
 
     case "Search":
-      queryObj = { query: "", bindVars: {} };
+      queryObj = {
+        query: `FOR doc IN findBooks
+      SEARCH PHRASE(doc.name, @search, "text_en") OR PHRASE(doc.author, @search, "text_en") OR PHRASE(doc.category, @search, "text_en")
+      SORT BM25(doc) desc
+      RETURN doc`,
+        bindVars: bindValue,
+      };
       break;
   }
   return queryObj;

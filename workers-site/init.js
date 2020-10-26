@@ -1022,7 +1022,28 @@ set BestsellersTable.quantity = quantity, BestsellersTable._key = _key
 on BestsellersTable._key == _key;
 `;
 
-// ABHISHEK: init user's social graph
+// ABHISHEK: init user's edges and social graph
+
+// ABHISHEK: init findBooks view
+/*
+{
+  "globallyUniqueId": "h7C47E71588CB/6373",
+  "id": "6373",
+  "links": {
+    "BooksTable": {
+      "analyzers": [
+        "text_en"
+      ],
+      "fields": {},
+      "includeAllFields": true,
+      "storeValues": "none",
+      "trackListPositions": false
+    }
+  },
+  "primarySort": [],
+  "type": "search"
+}
+*/
 
 const collectionHandler = async (client, collection, isEdge) => {
   const { name, data } = collection;

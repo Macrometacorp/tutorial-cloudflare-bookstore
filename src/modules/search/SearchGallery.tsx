@@ -28,22 +28,22 @@ export class SearchGallery extends React.Component<SearchGalleryProps, SearchGal
       const searchResults = await this.searchBooks();
 
       // Map the search results to a book object
-      const books = [];
-      for (var i = 0; i < searchResults.hits.total; i++) {
-        var hit = searchResults.hits.hits[i] && searchResults.hits.hits[i]._source;
-        hit && books.push({
-          _key: hit.id.$,
-          author: hit.author.S,
-          category: hit.category.S,
-          // id: hit.id.S,
-          name: hit.name.S,
-          price: hit.price.N,
-          rating: hit.rating.N,
-        });
-      }
+      // const books = [];
+      // for (var i = 0; i < searchResults.hits.total; i++) {
+      //   var hit = searchResults.hits.hits[i] && searchResults.hits.hits[i]._source;
+      //   hit && books.push({
+      //     _key: hit.id.$,
+      //     author: hit.author.S,
+      //     category: hit.category.S,
+      //     // id: hit.id.S,
+      //     name: hit.name.S,
+      //     price: hit.price.N,
+      //     rating: hit.rating.N,
+      //   });
+      // }
 
       this.setState({ 
-        books: books
+        books: searchResults
       });
     } catch (e) {
       console.error(e);
