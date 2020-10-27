@@ -1105,10 +1105,9 @@ async function init(client) {
     }
   }
 
-  const res = await client.getListOfViews();
-  const existingViews = res.result;
-
-  console.log(JSON.parse(existingViews));
+  const response = await client.getListOfViews();
+  const existingViews = response.result;
+  
   for (view of VIEWS) {
     const { name, properties } = view;
     const exists = existingViews.find(

@@ -88,11 +88,10 @@ const queries = (queryName, bindValue) => {
       };
       break;
     case "Checkout":
-      /* ABHISHEK: add edge from user to book once checked out */
       queryObj = {
         query: `LET items = (FOR item IN CartTable FILTER item.customerId == @customerId RETURN item)
         LET books = (FOR item in items
-            FOR book in BooksTable FILTER book._key == item.bookId return book)
+            FOR book in BooksTable FILTER book._key == item.bookId return {bookId:book._key ,author: book.author,category:book.category,name:book.name,price:book.price,rating:book.rating,quantity:item.quantity})
         INSERT {_key: @orderId, customerId: @customerId, books: books, orderDate: @orderDate} INTO OrdersTable
         FOR item IN items REMOVE item IN CartTable`,
         bindVars: bindValue,
