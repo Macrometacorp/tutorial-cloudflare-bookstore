@@ -54,7 +54,7 @@ export class PurchasedProductRow extends React.Component<PurchasedProductRowProp
       <div className="white-box">
         <div className="media">
           <div className="media-left media-middle">
-            <img className="media-object product-thumb" src={`./api/getImage?bookId=${this.state.book["_key"]}`} alt={`${this.state.book.name} covers`} />
+            <img className="media-object product-thumb" src={`./api/getImage?bookId=${this.state.book.bookId}`} alt={`${this.state.book.name} covers`} />
           </div>
           <div className="media-body">
             <h3 className="media-heading">{this.state.book.name}
@@ -66,7 +66,7 @@ export class PurchasedProductRow extends React.Component<PurchasedProductRowProp
             {/* <FriendRecommendations bookId={this.props.order.bookId} /> */}
             <div>
               Rating
-              <AddToCart bookId={this.state.book["_key"]} price={this.state.book.price} variant="buyAgain" />
+              <AddToCart bookId={this.state.book.bookId} price={this.state.book.price} variant="buyAgain" />
             </div>
             <StarRating stars={this.state.book.rating} />
           </div>
