@@ -984,6 +984,44 @@ const kvCollections = [
   },
 ];
 
+const GRAPHS = [
+  {
+    name: "UserSocialGraph",
+    properties: {
+      edgeDefinitions: [
+        {
+          collection: "friend",
+          from: ["UsersTable"],
+          to: ["UsersTable"],
+        },
+        {
+          collection: "purchased",
+          from: ["UsersTable"],
+          to: ["BooksTable"],
+        },
+      ],
+      orphanCollections: [],
+    },
+  },
+];
+
+const VIEWS = [
+  {
+    name: "findBooks",
+    properties: {
+      links: {
+        BooksTable: {
+          analyzers: ["text_en"],
+          fields: {},
+          includeAllFields: true,
+          storeValues: "none",
+          trackListPositions: false,
+        },
+      },
+    },
+  },
+];
+
 const STREAM_APP_NAME = "UpdateBestseller";
 
 const UPDATE_BESTSELLER_APP_DEFINITION = `@App:name("${STREAM_APP_NAME}")
@@ -1022,40 +1060,11 @@ set BestsellersTable.quantity = quantity, BestsellersTable._key = _key
 on BestsellersTable._key == _key;
 `;
 
-// ABHISHEK: init user's edges and social graph
-
-// ABHISHEK: init findBooks view
-/*
-{
-  "globallyUniqueId": "h7C47E71588CB/6373",
-  "id": "6373",
-  "links": {
-    "BooksTable": {
-      "analyzers": [
-        "text_en"
-      ],
-      "fields": {},
-      "includeAllFields": true,
-      "storeValues": "none",
-      "trackListPositions": false
-    }
-  },
-  "primarySort": [],
-  "type": "search"
-}
-*/
-
 const collectionHandler = async (client, collection, isEdge) => {
   const { name, data } = collection;
   const coll = isEdge ? client.edgeCollection(name) : client.collection(name);
-  // ABHISHEK: remove once fixed from jsc8
-  let exists;
-  try {
-    exists = await coll.exists();
-  } catch (e) {
-    exists = false;
-  }
-  // ABHISHEK: look into edge collection init
+  const exists = await coll.exists();
+
   const prefix = `${isEdge ? "Edge " : ""}Collection ${name}`;
   console.log(`${prefix} exists=${exists}`);
   if (!exists) {
@@ -1081,13 +1090,35 @@ async function init(client) {
     await collectionHandler(client, collection, false);
   }
 
-  for (edgeCollections of EDGE_COLLECTIONS) {
-    try {
-      await collectionHandler(client, edgeCollection, true);
-    } catch (e) {
-      console.log("------------------");
-      console.log(JSON.stringify(e));
-      console.log("==================");
+  for (edgeCollection of EDGE_COLLECTIONS) {
+    await collectionHandler(client, edgeCollection, true);
+  }
+
+  for (graph of GRAPHS) {
+    const { name, properties } = graph;
+    const exists = await client.hasGraph(name);
+    if (!exists) {
+      await client.createGraph(name, properties);
+      console.log(`Graph ${name} created`);
+    } else {
+      console.log(`Graph ${name} already exists. Skipping creation`);
+    }
+  }
+
+  const res = await client.getListOfViews();
+  const existingViews = res.result;
+
+  console.log(JSON.parse(existingViews));
+  for (view of VIEWS) {
+    const { name, properties } = view;
+    const exists = existingViews.find(
+      (existingView) => existingView.name === name
+    );
+    if (exists) {
+      console.log(`View ${name} exists. Skipping creation.`);
+    } else {
+      await client.createView(name, properties);
+      console.log(`View ${name} created.`);
     }
   }
 
