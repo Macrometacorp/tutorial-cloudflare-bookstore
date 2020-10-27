@@ -63,7 +63,7 @@ export class PurchasedProductRow extends React.Component<PurchasedProductRowProp
               </div>
             </h3>
             <small>{this.state.book.category}</small>
-            <FriendRecommendations bookId={this.props.order.bookId} />
+            {/* <FriendRecommendations bookId={this.props.order.bookId} /> */}
             <div>
               Rating
               <AddToCart bookId={this.state.book["_key"]} price={this.state.book.price} variant="buyAgain" />

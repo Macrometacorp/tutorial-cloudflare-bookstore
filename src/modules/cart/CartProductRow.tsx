@@ -93,7 +93,7 @@ export class CartProductRow extends React.Component<
             <p>
               <small>{this.state.book.category}</small>
             </p>
-            <FriendRecommendations bookId={this.props.order.bookId} />
+            {/* <FriendRecommendations bookId={this.props.order.bookId} /> */}
             <div>
               Rating
               <div className="pull-right">
