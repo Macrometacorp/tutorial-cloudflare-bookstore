@@ -2,7 +2,7 @@
 # play with a live demo here 
 https://gdn1-bookstore.macrometadev.workers.dev/
 
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/Macrometacorp/tutorial-cloudflare-bookstore/blob/master/ecommerce.png)
 
 Macrometa-Cloudflare Bookstore Demo App is a full-stack e-commerce web application that creates a storefront (and backend) for customers to shop for "fictitious" books.  Originally based on the AWS bookstore template app (https://github.com/aws-samples/aws-bookstore-demo-app), this demo replaces all AWS services like DynamoDB, Neptune, elastic search, lambda etc with Macrometa's geo distributed data platform which provides a K/V store, DynamoDB compatible document database, graph database, streams and event processing along with Cloud Flare workers for the globally distributed functions as a service.
 
