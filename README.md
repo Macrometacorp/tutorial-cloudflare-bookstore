@@ -1,5 +1,5 @@
 # Macrometa CloudFlare e-commerce template app 
-# play with a live demo here 
+# play with a live demo 👇 
 https://gdn1-bookstore.macrometadev.workers.dev/
 
 ![alt text](https://github.com/Macrometacorp/tutorial-cloudflare-bookstore/blob/master/ecommerce.png)
