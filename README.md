@@ -1,4 +1,5 @@
-# Macrometa CloudFlare e-commerce template app (ONLINE BOOKSTORE DEMO)
+# Macrometa CloudFlare e-commerce template app 
+# (ONLINE BOOKSTORE DEMO)
 Macrometa-Cloudflare Bookstore Demo App is a full-stack e-commerce web application that creates a storefront (and backend) for customers to shop for "fictitious" books.  Originally based on the AWS bookstore template app (https://github.com/aws-samples/aws-bookstore-demo-app), this demo replaces all AWS services like DynamoDB, Neptune, elastic search, lambda etc with Macrometa's geo distributed data platform which provides a K/V store, DynamoDB compatible document database, graph database, streams and event processing along with Cloud Flare workers for the globally distributed functions as a service.
 
 Unlike typical cloud platforms like AWS where the backend stack runs in a single region, Macrometa and Cloudflare let you build stateful distributed microservices that run in 100s of regions around the world concurrently. The application logic runs in cloudflare's low latency function as a service runtime on cloudflare PoPs and make stateful data requests to the closest Macrometa region.  End to end latency for P99 is < 55ms from almost everywhere in the world. 
@@ -6,19 +7,19 @@ Unlike typical cloud platforms like AWS where the backend stack runs in a single
 As a user of the demo- You can browse and search for books, look at recommendations and best sellers, manage your cart, checkout, view your orders, and more.
 
 ## Macrometa components
-1. Product catalog/shopping cart - implemented using Macrometa document database
+# 1. Product catalog/shopping cart - implemented using Macrometa document database
 ```
 BooksTable - collection of the available books
 CartTable - books customers have addded in their cart
 OrdersTable - Past orders of a customer
 ```
-2. Search - implemented using Macrometa Views
+# 2. Search - implemented using Macrometa Views
 ```
 findBooks - the view which is queried for search
 ```
 Search matches on the `author` or `category` or the `name` of books in `BooksTable` with phrase matching
 
-3. Recommendations -  implemented using Macrometa graphs
+# 3. Recommendations -  implemented using Macrometa graphs
 ```
 friend - edge collection
 purchased - edge collection
@@ -26,19 +27,19 @@ UsersTable - vertex collection
 BooksTable vertex collection
 UserSocialGraph - Graph
 ```
-4. Top sellers list - implemented using Macrometa Streams & Event Processing
+# 4. Top sellers list - implemented using Macrometa Streams & Event Processing
 ```
 UpdateBestseller - Stream app
 BestsellersTable - document collection
 ```
 
 ## Cloudflare components
-1. Worker sites - KV to hold site's assets and deployment
-2. KV - storing bookstore images
+# 1. Worker sites - KV to hold site's assets and deployment
+# 2. KV - storing bookstore images
 ```
 BOOK_IMAGES - KV which has all the book's images
 ```
-3. Workers - Backend talking with C8
+# 3. Workers - Backend talking with C8
 
 # Installing workers CLI
 
