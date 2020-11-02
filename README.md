@@ -53,7 +53,7 @@ It is advisable to have `npm` installed via `nvm` to avoid getting into issues w
 # Configuring the project for deployment
 
 ## Obtaining your API token
-We will need the API token to be able to configure the CLI. Please contact the Ops team for the token, or create your own by following the docs [here](https://developers.cloudflare.com/workers/learning/getting-started#6b-obtaining-your-api-token-or-global-api-key)
+We will need the Macrometa API token to be able to configure the CLI. Please signup for a macrometa account for the token, or create your own by following the docs if you already have an account  [here](https://developers.cloudflare.com/workers/learning/getting-started#6b-obtaining-your-api-token-or-global-api-key)
 
 ## Configuring Wrangler with your credentials
 Run `wrangler config` and enter the above API token when asked for. More details can be found [here](https://developers.cloudflare.com/workers/learning/getting-started#6c-configuring-wrangler-with-your-credentials)
