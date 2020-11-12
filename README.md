@@ -43,7 +43,7 @@ BestsellersTable - document collection
 ```
 BOOK_IMAGES - KV which has all the book's images
 ```
-# 3. Workers - Backend talking with C8
+# 3. Workers - Backend talking with GDN
 
 # Installing workers CLI
 
@@ -67,7 +67,7 @@ Run `wrangler config` and enter the above API token when asked for. More details
 
 `vars` provides the environment variable we use in the workers itself. They include:
 1. `DC_LIST`: for stream app init
-2. `C8_URL`: C8 federation URL
+2. `C8_URL`: GDN federation URL
 3. `C8_API_KEY`: API key of the tenant being used
 
 
