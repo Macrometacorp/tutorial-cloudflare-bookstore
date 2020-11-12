@@ -105,6 +105,9 @@ const optionsObj = {
 const client = new jsc8({
   url: C8_URL,
   apiKey: C8_API_KEY,
+  agentOptions: {
+    maxSockets: 50000
+  },
   agent: fetch,
 });
 
