@@ -1,4 +1,4 @@
-name = "gdn1-bookstore"
+name = "bookstore"
 type = "webpack"
 account_id = "b3dad22670b88424da9afddc967218a2"
 workers_dev = true
