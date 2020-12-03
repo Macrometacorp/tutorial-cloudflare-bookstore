@@ -114,8 +114,9 @@ const queries = (queryName, bindValue) => {
         // query:
         //   "FOR book in BestsellersTable SORT book.quantity DESC LIMIT 20 return book._key",
         query: `FOR bestseller in BestsellersTable
+        SORT bestseller.quantity DESC
         FOR book in BooksTable
-            FILTER bestseller._key == book._key SORT bestseller.quantity DESC LIMIT 20 RETURN book`,
+            FILTER bestseller._key == book._key LIMIT 20 RETURN book`,
         bindVars: {},
       };
       break;
