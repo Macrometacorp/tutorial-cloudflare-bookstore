@@ -4,7 +4,7 @@ account_id = "b3dad22670b88424da9afddc967218a2"
 workers_dev = true
 route = ""
 zone_id = ""
-vars = { DC_LIST="gdn1-sfo2", C8_URL="https://gdn1.prod.macrometa.io", C8_API_KEY="xxxx" }
+vars = { DC_LIST="gdn-us-west", C8_URL="https://gdn.paas.macrometa.io", C8_API_KEY="xxxx" }
 kv-namespaces = [
     { binding = "BOOK_IMAGES", id = "1fcd1c0a7aae4c958bde0606dd090d95" }
 ]
