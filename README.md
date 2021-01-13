@@ -92,4 +92,20 @@ This will create all the collections and dummy data for you.
 1. Now login to the tenant and activate the stream app.
 2. Edit and save the view with the correct data if not initialised properly. Details can be found in `init.js`
 
+### Indexes for different collections
+
+1. BestsellersTable - `quantity`
+
+2. BooksTable - `category`
+
+3. CartTable - `customerId`, single index of `customerId, bookId`
+
+4. friend
+
+5. OrdersTable - `customerId`
+
+6. purchased
+
+7. UsersTable - `customerId`
+
 
