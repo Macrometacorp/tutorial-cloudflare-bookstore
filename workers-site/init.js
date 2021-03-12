@@ -1107,7 +1107,7 @@ async function init(client) {
 
   const response = await client.getListOfViews();
   const existingViews = response.result;
-  
+
   for (view of VIEWS) {
     const { name, properties } = view;
     const exists = existingViews.find(
@@ -1121,24 +1121,24 @@ async function init(client) {
     }
   }
 
-  const res = await client.getKVCollections();
-  const existingKVCollections = res.result;
-  for (kvCollection of kvCollections) {
-    const { name, data } = kvCollection;
-    const exists = existingKVCollections.find(
-      (existingColl) => existingColl.name === name
-    );
-    if (!exists) {
-      await client.createKVCollection(name);
-      console.log(`KV Collection ${name} created`);
-      if (Array.isArray(data) && data.length) {
-        await client.insertKVPairs(name, data);
-        console.log(`Data inserted in ${name}`);
-      }
-    } else {
-      console.log(`KV Collection ${name} already exists. Skipping creation.`);
-    }
-  }
+  // const res = await client.getKVCollections();
+  // const existingKVCollections = res.result;
+  // for (kvCollection of kvCollections) {
+  //   const { name, data } = kvCollection;
+  //   const exists = existingKVCollections.find(
+  //     (existingColl) => existingColl.name === name
+  //   );
+  //   if (!exists) {
+  //     await client.createKVCollection(name);
+  //     console.log(`KV Collection ${name} created`);
+  //     if (Array.isArray(data) && data.length) {
+  //       await client.insertKVPairs(name, data);
+  //       console.log(`Data inserted in ${name}`);
+  //     }
+  //   } else {
+  //     console.log(`KV Collection ${name} already exists. Skipping creation.`);
+  //   }
+  // }
 
   const dcList = DC_LIST.split(",");
   console.log("Checking stream app", JSON.stringify(dcList));
