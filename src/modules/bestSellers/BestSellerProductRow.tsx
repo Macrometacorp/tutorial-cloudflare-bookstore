@@ -62,7 +62,7 @@ export class ProductRow extends React.Component<
               alt={`${this.state.book.name} cover`}
             />
           </div>
-          <div className="media-body product-padding padding-20">
+          <div className="media-body  padding-20">
             <h3 className="media-heading">
               {this.state.book.name}
               <small className="pull-right margin-1">
@@ -75,11 +75,19 @@ export class ProductRow extends React.Component<
             {/*ABHISHEK*/}
             {/* <FriendRecommendations bookId={this.props.bookId} /> */}
             <div>
-              Rating
-              <AddToCart
-                bookId={this.props.bookId}
-                price={this.state.book.price}
-              />
+              <span
+                style={{
+                  display: "block",
+                }}
+              >
+                Rating
+              </span>
+              <span>
+                <AddToCart
+                  bookId={this.props.bookId}
+                  price={this.state.book.price}
+                />
+              </span>
             </div>
             <StarRating stars={this.state.book.rating} />
           </div>

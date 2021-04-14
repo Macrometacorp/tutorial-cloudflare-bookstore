@@ -57,7 +57,6 @@ export default class BestSellers extends React.Component<
   render() {
     return (
       <div className="Category">
-        <SearchBar />
         <CategoryNavBar />
         <div>
           <div className="well-bs no-radius">

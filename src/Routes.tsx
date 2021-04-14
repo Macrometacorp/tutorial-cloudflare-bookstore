@@ -16,19 +16,26 @@ import PropsRoute from "./common/PropsRoute";
 interface RouteProps {
   isAuthenticated: boolean;
   userHasAuthenticated: (authenticated: boolean) => void;
+  showNetworkLatency: boolean;
 }
 
-export const Routes: React.SFC<RouteProps> = (childProps) =>
+export const Routes: React.SFC<RouteProps> = (childProps) => (
   <Switch>
     <PropsRoute path="/" exact component={Home} props={childProps} />
     <PropsRoute path="/login" exact component={Login} props={childProps} />
     <PropsRoute path="/signup" exact component={Signup} props={childProps} />
     <Route path="/best" exact component={BestSellers} />
     <Route path="/cart" exact component={ShoppingCart} />
-    <Route path="/category/:id" exact component={CategoryView} />
+    <PropsRoute
+      path="/category/:id"
+      exact
+      component={CategoryView}
+      props={childProps}
+    />
     <Route path="/past" exact component={PastPurchases} />
     <Route path="/checkout" exact component={Checkout} />
     <Route path="/checkout-confirm" exact component={CheckoutConfirm} />
     <Route path="/search/:id" exact component={SearchView} />
     <Route component={NotFound} />
-  </Switch>;
+  </Switch>
+);

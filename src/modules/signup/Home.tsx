@@ -3,7 +3,7 @@ import screenshot from "../../images/screenshot.png";
 import yourpastorders from "../../images/yourpastorders.png";
 import bestSellers from "../../images/bestSellers.png";
 import yourshoppingcart from "../../images/yourshoppingcart.png";
-import { Hero } from "../../common/hero/Hero";
+import Hero from "../../common/hero/Hero";
 import { CategoryNavBar } from "../category/categoryNavBar/CategoryNavBar";
 import { SearchBar } from "../search/searchBar/SearchBar";
 import { BestSellersBar } from "../bestSellers/bestSellersBar/BestSellersBar";
@@ -11,9 +11,13 @@ import { CategoryGalleryTeaser } from "../category/CategoryGalleryTeaser";
 import { FriendsBought } from "../friends/FriendsBought";
 import { LinkContainer } from "react-router-bootstrap";
 import "./home.css";
+import { Auth } from "../../apiCalls";
+import { Button, Glyphicon } from "react-bootstrap";
 
 interface HomeProps {
   isAuthenticated: boolean;
+  userHasAuthenticated: (authenticated: boolean) => void;
+  showNetworkLatency: boolean;
 }
 
 interface HomeState {
@@ -25,7 +29,7 @@ export default class Home extends Component<HomeProps, HomeState> {
     super(props);
 
     this.state = {
-      isLoading: true,
+      isLoading: false,
     };
   }
 
@@ -37,27 +41,72 @@ export default class Home extends Component<HomeProps, HomeState> {
     this.setState({ isLoading: true });
   }
 
+  onLogin = async (event: any) => {
+    event.preventDefault();
+    this.setState({ isLoading: true });
+
+    try {
+      await Auth.signIn("guest@macrometa.io", "Abcd1234");
+
+      this.setState({ isLoading: false }, () => {
+        this.props.userHasAuthenticated(true);
+      });
+      // this.setState({ redirect: true });
+    } catch (e) {
+      console.error(e.message);
+      this.setState({ isLoading: false });
+    }
+  };
   renderLanding() {
     return (
       <div className="lander">
-        <h1>Edge Commerce Demo</h1>
         <hr />
-        <p>This is an example application demonstrating Cloudflare Workers & Marcometa Data Infrastructure. It's an exact replication of the Amazon Web Services Amazon Book Store example application using Cloudflare and Macrometa. In this bookstore demo, users can browse and search for books, view recommendations, see the leaderboard, view past orders, and more. You can get this sample application up and running in your own environment and learn more about the architecture of the app by looking at the <a href="https://github.com/macrometacorp" target="_blank">github repository</a>.</p>
+        <p>
+          This is an example app built with Cloudflare Workers & Marcometa
+          Global Data Network. It's an exact replication of the Amazon Web
+          Services Amazon Book Store example application using Cloudflare and
+          Macrometa instead of AWS. It's entirely serverlesss and
+          geo-distributed, which provides a lovely developer experience when
+          building it and unparalleled performance. Learn more about the
+          architecture of the app by checking out the source code in this{" "}
+          <a
+            href="https://github.com/Macrometacorp/tutorial-cloudflare-bookstore"
+            target="_blank"
+          >
+            github repository
+          </a>
+          .
+        </p>
         <div className="button-container col-md-12">
-          <LinkContainer to="/signup">
-          <a href="/signup">Sign up to explore the demo</a>
-          </LinkContainer>
+          <div style={{ marginLeft: "30%", marginRight: "30%" }}>
+            <Button
+              bsSize="large"
+              type="button"
+              onClick={(event: any) => {
+                this.onLogin(event);
+              }}
+            >
+              {this.state.isLoading && (
+                <Glyphicon glyph="refresh" className="spinning" />
+              )}
+              Log in to shared guest account
+            </Button>
+          </div>
         </div>
-        <img src={screenshot} className="img-fluid full-width" alt="Screenshot"></img>
-    </div>);
+        <img
+          src={screenshot}
+          className="img-fluid full-width"
+          alt="Screenshot"
+        ></img>
+      </div>
+    );
   }
 
   renderHome() {
     return (
       <div className="bookstore">
-        <Hero />
-        <SearchBar />
         <CategoryNavBar />
+        <Hero showNetworkLatency={this.props.showNetworkLatency} />
         <BestSellersBar />
         <div className="well-bs col-md-12 ad-container-padding">
           <div className="col-md-4 ad-padding">

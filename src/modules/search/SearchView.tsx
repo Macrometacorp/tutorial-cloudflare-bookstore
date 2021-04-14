@@ -11,7 +11,6 @@ export default class SearchView extends Component<SearchViewProps> {
   render() {
     return (
       <div className="Category">
-        <SearchBar />
         <CategoryNavBar />
         <SearchGallery match={this.props.match} />
       </div>

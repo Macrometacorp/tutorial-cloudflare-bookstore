@@ -1,42 +1,42 @@
 .Home .lander {
-  padding: 80px 0;
+  padding: 1vh 0;
   text-align: left;
 }
 
-.container-category img{
+.container-category img {
   width: 100%;
   cursor: pointer;
 }
 
-.Home .product-section{
+.Home .product-section {
   padding: 30px 0;
 }
 
-.Home .product-section h2{
+.Home .product-section h2 {
   padding: 10px 0;
-  font-family: AmazonEmber,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-family: AmazonEmber, Helvetica Neue, Helvetica, Arial, sans-serif;
   font-weight: 300;
   text-align: center;
 }
 
 .Home .lander h1 {
-  font-size:52px;
+  font-size: 52px;
   text-align: center;
-  font-family: AmazonEmber,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-family: AmazonEmber, Helvetica Neue, Helvetica, Arial, sans-serif;
   font-weight: 300;
 }
 
-.ad-container-padding{
+.ad-container-padding {
   padding: 0 8px 14px 8px !important;
 }
 
-.ad-padding{ 
+.ad-padding {
   padding: 0 7px !important;
 }
 
 .Home .lander p {
   color: #555;
-  font-size:18px;
+  font-size: 18px;
   line-height: 28px;
   padding: 40px 15px;
   font-size: 1.28em;
@@ -45,13 +45,13 @@
 }
 
 .Home a {
-  font-size:18px;
+  font-size: 18px;
   line-height: 28px;
   font-weight: 200;
   line-height: 1.6em;
 }
 
-.Home .product-section p{
+.Home .product-section p {
   padding: 10px 0;
 }
 
@@ -84,25 +84,26 @@
   padding: 0px 0px;
 }
 
-.Home .button-container{
+.Home .button-container {
   text-align: center;
   padding: 0px 0 60px 0;
 }
 
-.Home .button-container a{
+.Home .button-container a {
   padding: 10px 20px;
-  background-color: #2EADDE;
+  background-color: #2eadde;
   border: 0;
-  color:#fff;
+  color: #fff;
   font-weight: 400;
   font-size: 16px;
 }
 
-.navbar-default{
+.navbar-default {
   border: 0px !important;
   background: transparent !important;
   box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0), 0 1px 5px rgba(0, 0, 0, 0) !important;
-  -webkit-box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0), 0 1px 5px rgba(0, 0, 0, 0) !important;
+  -webkit-box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0),
+    0 1px 5px rgba(0, 0, 0, 0) !important;
   margin: 0 !important;
 }
 
@@ -113,6 +114,10 @@
 }
 
 @keyframes spin {
-  from { transform: scale(1) rotate(0deg); }
-  to { transform: scale(1) rotate(360deg); }
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
 }

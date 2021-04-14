@@ -100,7 +100,7 @@ export class CartProductRow extends React.Component<
                 <div className="input-group">
                   <input
                     type="number"
-                    className="form-control"
+                    className="form-control product-quantity-input-style"
                     placeholder="Quantity"
                     defaultValue={this.props.order.quantity.toString()}
                     onChange={this.onQuantityUpdated}

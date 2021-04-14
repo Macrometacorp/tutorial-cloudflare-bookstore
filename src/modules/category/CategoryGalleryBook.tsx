@@ -26,7 +26,7 @@ export class CategoryGalleryBook extends React.Component<
             alt={`${this.props.book.name} cover`}
           />
           <div className="caption">
-            <h4 className="text-center">{this.props.book.name}</h4>
+            <h4 className="text-center wrap-text" >{this.props.book.name}</h4>
             <AddToCart
               bookId={this.props.book["_key"]}
               price={this.props.book.price}

@@ -2,11 +2,20 @@ import { Auth } from "./apiCalls";
 import React, { Component, Fragment } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link, withRouter } from "react-router-dom";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
+import {
+  ButtonToolbar,
+  Form,
+  Nav,
+  Navbar,
+  NavItem,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "react-bootstrap";
 import "./App.css";
 import { Routes } from "./Routes";
 
-import bookstore from "./images/bookstore.png"; 
+import bookstore from "./images/bookstore.png";
+import SearchBar from "./modules/search/searchBar/SearchBar";
 
 interface AppProps {
   history: any;
@@ -15,6 +24,8 @@ interface AppProps {
 interface AppState {
   isAuthenticated: boolean;
   isAuthenticating: boolean;
+  showNetworkLatency: boolean;
+  showLatestNetworkLatencyValue: string;
 }
 
 class App extends Component<AppProps, AppState> {
@@ -24,12 +35,17 @@ class App extends Component<AppProps, AppState> {
     this.state = {
       isAuthenticated: false,
       isAuthenticating: true,
+      showNetworkLatency: false,
+      showLatestNetworkLatencyValue: "50 ms",
     };
 
     document.title = "Edge Commerce Demo";
   }
 
   async componentDidMount() {
+    if (!sessionStorage.getItem("responseTime")) {
+      sessionStorage.setItem("responseTime", JSON.stringify([]));
+    }
     try {
       if (await Auth.currentSession()) {
         this.userHasAuthenticated(true);
@@ -44,30 +60,72 @@ class App extends Component<AppProps, AppState> {
   }
 
   userHasAuthenticated = (authenticated: boolean) => {
-    this.setState({ isAuthenticated: authenticated });
+    const networkLatency = JSON.parse(
+      sessionStorage.getItem("responseTime") || "[]"
+    );
+    const networkLatencyValue =
+      networkLatency &&
+      networkLatency.length > 0 &&
+      networkLatency[networkLatency.length - 1].Time;
+    this.setState({
+      isAuthenticated: authenticated,
+      showLatestNetworkLatencyValue: networkLatencyValue,
+    });
   };
 
   handleLogout = async () => {
     await Auth.signOut();
 
     this.userHasAuthenticated(false);
-    this.props.history.push("/login");
+    this.props.history.push("/");
+  };
+
+  renderNetworkLatency = async () => {
+    const networkLatency = JSON.parse(
+      sessionStorage.getItem("responseTime") || "[]"
+    );
+    const networkLatencyValue =
+      networkLatency &&
+      networkLatency.length > 0 &&
+      networkLatency[networkLatency.length - 1].Time;
+    this.setState((prevState) => ({
+      showNetworkLatency: !prevState.showNetworkLatency,
+      showLatestNetworkLatencyValue: networkLatencyValue,
+    }));
   };
 
   showLoggedInBar = () => (
     <Fragment>
+      <Navbar.Form pullLeft>
+        <SearchBar />
+      </Navbar.Form>
       <LinkContainer to="/past">
         <NavItem>
-          <span className="orange line-height-24">Past orders</span>
+          <span
+            className="orange line-height-24 navbar-items-font-style"
+            style={{ fontWeight: "initial" }}
+          >
+            Past orders
+          </span>
         </NavItem>
       </LinkContainer>
       <LinkContainer to="/best">
         <NavItem>
-          <span className="orange line-height-24">Best sellers</span>
+          <span
+            className="orange line-height-24 navbar-items-font-style"
+            style={{ fontWeight: "initial" }}
+          >
+            Bestsellers
+          </span>
         </NavItem>
       </LinkContainer>
       <NavItem onClick={this.handleLogout}>
-        <span className="orange line-height-24">Log out</span>
+        <span
+          className="orange line-height-24 navbar-items-font-style"
+          style={{ fontWeight: "initial" }}
+        >
+          Log out
+        </span>
       </NavItem>
       <LinkContainer to="/cart">
         <NavItem>
@@ -86,12 +144,22 @@ class App extends Component<AppProps, AppState> {
     <Fragment>
       <LinkContainer to="/signup">
         <NavItem>
-          <span className="orange">Sign up</span>
+          <span
+            className="orange  navbar-items-font-style"
+            style={{ fontWeight: "initial" }}
+          >
+            Sign up
+          </span>
         </NavItem>
       </LinkContainer>
       <LinkContainer to="/login">
         <NavItem>
-          <span className="orange">Log in</span>
+          <span
+            className="orange  navbar-items-font-style"
+            style={{ fontWeight: "initial" }}
+          >
+            Log in
+          </span>
         </NavItem>
       </LinkContainer>
     </Fragment>
@@ -101,25 +169,70 @@ class App extends Component<AppProps, AppState> {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
+      showNetworkLatency: this.state.showNetworkLatency,
     };
 
     return (
       !this.state.isAuthenticating && (
-        <div className="App container">
-          <Navbar fluid collapseOnSelect>
+        <div className="app-restyling">
+          <Navbar
+            fluid
+            collapseOnSelect
+            style={{
+              paddingBottom: "40px",
+              paddingLeft: "5px",
+              paddingRight: "5px",
+              width: "auto",
+            }}
+          >
             <Navbar.Header>
               <Navbar.Brand>
                 <Link to="/">
-                  <span className="orange">
-                    {" "}
-                    <img src={bookstore} alt="bookstore" /> BOOKSTORE
+                  <span className="orange" style={{ fontSize: "19px" }}>
+                    <img src={bookstore} alt="bookstore" /> EDGE COMMERCE DEMO
                   </span>
                 </Link>
               </Navbar.Brand>
               <Navbar.Toggle />
             </Navbar.Header>
+            {this.state.isAuthenticated ? (
+              <>
+                <Navbar.Text style={{ paddingTop: "2px" }}>
+                  <span
+                    className="navbar-items-font-style"
+                    style={{ marginLeft: "5vw", fontSize: "24px" }}
+                  >
+                    Latency :
+                  </span>
+                  <span
+                    className="input navbar-items-font-style"
+                    role="textbox"
+                    style={{ fontSize: "24px" }}
+                  >
+                    {this.state.showLatestNetworkLatencyValue}
+                  </span>
+                </Navbar.Text>
+                <Navbar.Form pullLeft>
+                  <div className="checkbox-styling">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="defaultUnchecked"
+                      onChange={this.renderNetworkLatency}
+                      style={{ marginRight: "5px" }}
+                    />
+                    <label
+                      className="custom-control-label navbar-items-font-style "
+                      style={{ fontSize: "24px" }}
+                    >
+                      More Details
+                    </label>
+                  </div>
+                </Navbar.Form>
+              </>
+            ) : null}
             <Navbar.Collapse>
-              <Nav pullRight>
+              <Nav pullRight style={{ paddingTop: "2px" }}>
                 {this.state.isAuthenticated
                   ? this.showLoggedInBar()
                   : this.showLoggedOutBar()}
@@ -129,6 +242,7 @@ class App extends Component<AppProps, AppState> {
           <Routes
             isAuthenticated={childProps.isAuthenticated}
             userHasAuthenticated={childProps.userHasAuthenticated}
+            showNetworkLatency={childProps.showNetworkLatency}
           />
         </div>
       )
