@@ -2,6 +2,7 @@ export const apiRtt = (method: string) => {
   let performances: any = performance
     .getEntriesByType("resource")
     .filter((item: any) => item.initiatorType === "fetch");
+
   const performanceRttArray = JSON.parse(
     sessionStorage.getItem("responseTime") || "[]"
   );
@@ -14,7 +15,8 @@ export const apiRtt = (method: string) => {
         " ms";
       return (
         performanceItem.Name === performances[i].name &&
-        (performanceItem.Time === performanceTime || performanceItem.Time > performanceTime) &&
+        (performanceItem.Time === performanceTime ||
+          performanceItem.Time > performanceTime) &&
         performanceItem.URL === performances[i].transferSize + " B"
       );
     });
@@ -33,8 +35,15 @@ export const apiRtt = (method: string) => {
         URL: performances[i].transferSize + " B",
       };
       newArray.push(resor);
-    } 
+    }
   }
+
   let responseTimeArray = [...performanceRttArray, ...newArray];
+
+  if (responseTimeArray.length > 100) {
+
+    const difference = Math.abs(responseTimeArray.length - 100);
+    responseTimeArray.splice(0, difference);
+  }
   sessionStorage.setItem("responseTime", JSON.stringify(responseTimeArray));
 };

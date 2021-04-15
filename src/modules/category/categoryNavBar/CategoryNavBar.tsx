@@ -10,6 +10,7 @@ export class CategoryNavBar extends React.Component {
           <li role="presentation" key={category}>
             <a
               className="category-link"
+              id={`category-nav-bar-${category}`}
               href={`/category/${category}`}
               style={{ fontSize: "18px", lineHeight: "28px" }}
             >

@@ -16,7 +16,6 @@ const Hero = (props: HeroProps) => {
     const values = sessionStorage.getItem("responseTime") || "[]";
     const jso = JSON.parse(values);
     setApiValue(jso);
-    console.log(`Logged output: Hero -> componentDidMount -> jso`, jso);
   }, [props.showNetworkLatency]);
 
   return (

@@ -43,7 +43,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 placeholder="Search"
                 value={this.state.value}
                 onChange={this.handleChange}
-                style={{ width: "6vw" }}
+                style={{ width: "8vw" }}
               />
               <div style={{ display: "flex", flexDirection: "row" }}>
                 <button
