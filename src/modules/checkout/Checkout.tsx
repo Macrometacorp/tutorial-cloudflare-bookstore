@@ -7,7 +7,6 @@ export default class Checkout extends Component {
   render() {
     return (
       <div>
-        <SearchBar />
         <CategoryNavBar />
         <div className="well-bs">
           <div className="white-box no-margin-top no-margin-bottom">

@@ -84,7 +84,6 @@ export default class ShoppingCart extends Component<
       <div className="loader"></div>
     ) : (
       <div className="Category">
-        <SearchBar />
         <CategoryNavBar />
         <div className="well-bs padding-bottom-120">
           <div className="white-box no-margin-top">

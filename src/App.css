@@ -1,59 +1,80 @@
 .App {
   margin-top: 15px;
 }
-
+.app-restyling {
+  margin: 2vh 2vw 2vw !important;
+}
 .App .navbar-brand {
   font-weight: bold;
 }
 
 .App .orange {
-  color: #2EADDE;
+  color: #2eadde;
 }
 
 .App .white {
   color: #fff;
 }
 
-.shopping-icon-container{
-	background-color: #2EADDE;
-	padding: 2px 12px 0 12px;
-	border-radius: 14px;
-	margin-right: -24px;
+.shopping-icon-container {
+  background-color: #2eadde;
+  padding: 2px 12px 0 12px;
+  border-radius: 14px;
+  margin-right: -24px;
 }
 
-.shopping-icon-container .count{
-	margin: 0 0 0 4px;
+.shopping-icon-container .count {
+  margin: 0 0 0 4px;
 }
 
-.line-height-24{
-	line-height: 24px;
+.line-height-24 {
+  line-height: 24px;
 }
 
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .active > a:active{
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .active > a:active {
   background-color: transparent !important;
   background-image: none !important;
-  box-shadow:inset 0 0px 0px rgba(0, 0, 0, .00) !important;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0) !important;
 }
 
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .active > a:focus{
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .active > a:focus {
   background-color: transparent !important;
   background-image: none !important;
-  box-shadow:inset 0 0px 0px rgba(0, 0, 0, .00) !important;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0) !important;
 }
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .active > a:focus-within{
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .active > a:focus-within {
   background-color: transparent !important;
   background-image: none !important;
-  box-shadow:inset 0 0px 0px rgba(0, 0, 0, .00) !important;
-}
-
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .active > a:visited{
-  background-color: transparent !important;
-  background-image: none !important;
-  box-shadow:inset 0 0px 0px rgba(0, 0, 0, .00) !important;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0) !important;
 }
 
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .active > a {  
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .active > a:visited {
   background-color: transparent !important;
   background-image: none !important;
-  box-shadow:inset 0 0px 0px rgba(0, 0, 0, .00) !important;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0) !important;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .active > a {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0) !important;
+}
+
+.checkbox-styling {
+  padding-top: 7px;
+  margin-left: -20px;
+  /* background-color: #2eadde; */
+}
+.navbar-items-font-style {
+  color: #2eadde;
+  padding-top: 2px !important;
+  line-height: 24px;
+  font-size: 16px;
+  font-weight: bolder;
+  margin-left: 2px;
 }

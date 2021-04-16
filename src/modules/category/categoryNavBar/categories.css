@@ -1,19 +1,22 @@
-.justify-content-center {
+.justify-content-space-between {
   display: flex;
-  justify-content: center; 
+  justify-content: space-between;
 }
 
 .category-link {
   color: inherit !important;
-} 
-
-.nav-cat{
-	font-weight: 200;
-	font-size: 12px;
-	background-color: #292929;
-	color:#fff;
 }
 
-.top-hero-padding{
-	padding-top: 0 !important;
+.nav-cat {
+  font-weight: 200;
+  font-size: 12px;
+  background-color: #292929;
+  color: #fff;
+}
+
+.top-hero-padding {
+  padding-top: 0 !important;
+}
+.nav > .li > .a {
+  padding: 15px;
 }

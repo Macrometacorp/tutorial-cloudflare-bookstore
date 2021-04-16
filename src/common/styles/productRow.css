@@ -20,7 +20,7 @@
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 0px;
-  padding:20px;
+  padding: 20px;
 }
 
 .margin-1 {
@@ -31,15 +31,18 @@
   margin: 0;
 }
 
-.no-padding{
+.no-padding {
   padding: 0 !important;
   line-height: 0 !important;
 }
 
-.product-padding{
+.product-padding {
   padding: 20px !important;
 }
 
-.product-price h4{
+.product-price h4 {
   font-weight: 300 !important;
+}
+.product-quantity-input-style {
+  height: 40px;
 }

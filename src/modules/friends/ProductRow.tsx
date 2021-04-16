@@ -7,7 +7,7 @@ import FriendRecommendations from "../../common/friendRecommendations/FriendReco
 import { Book } from "../bestSellers/BestSellerProductRow";
 
 interface ProductRowProps {
-  book: Book,
+  book: Book;
   bookId: string;
 }
 
@@ -28,7 +28,7 @@ export class ProductRow extends React.Component<
   }
 
   componentDidMount() {
-    this.setState({book: this.props.book})
+    this.setState({ book: this.props.book });
     // API.get("books", `/books/${this.props.bookId}`, null)
     //   .then((response) => this.setState({ book: response }))
     //   .catch((error) => console.error(error));
@@ -47,7 +47,7 @@ export class ProductRow extends React.Component<
               alt={`${this.state.book.name} cover`}
             />
           </div>
-          <div className="media-body product-padding padding-20">
+          <div className="media-body  padding-20">
             <h3 className="media-heading">
               {this.state.book.name}
               <small className="pull-right ">${this.state.book.price}</small>
@@ -57,11 +57,13 @@ export class ProductRow extends React.Component<
             </p>
             <FriendRecommendations bookId={this.props.bookId} />
             <div>
-              Rating
-              <AddToCart
-                bookId={this.state.book["_key"]}
-                price={this.state.book.price}
-              />
+              <span style={{ display: "block" }}> Rating</span>
+              <span>
+                <AddToCart
+                  bookId={this.state.book["_key"]}
+                  price={this.state.book.price}
+                />
+              </span>
             </div>
             <StarRating stars={this.state.book.rating} />
           </div>

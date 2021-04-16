@@ -22,27 +22,30 @@ interface PastPurchasesState {
   orders: Purchases[];
 }
 
-export default class PastPurchases extends Component<PastPurchasesProps, PastPurchasesState> {
+export default class PastPurchases extends Component<
+  PastPurchasesProps,
+  PastPurchasesState
+> {
   constructor(props: PastPurchasesProps) {
     super(props);
 
     this.state = {
       userInfo: null,
       isLoading: true,
-      orders: []
+      orders: [],
     };
   }
 
   async componentDidMount() {
     const userInfo = await Auth.currentUserInfo();
-    this.setState({ userInfo })
+    this.setState({ userInfo });
 
     try {
       const orders = await this.listOrders();
-      this.setState({ 
+      this.setState({
         orders: orders,
-        isLoading: false
-     });
+        isLoading: false,
+      });
     } catch (e) {
       console.error(e);
     }
@@ -54,34 +57,56 @@ export default class PastPurchases extends Component<PastPurchasesProps, PastPur
 
   getPrettyDate = (orderDate: number) => {
     const date = new Date(orderDate);
-    return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`
-  }
+    return `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${
+      date.getMinutes() < 10 ? "0" : ""
+    }${date.getMinutes()}`;
+  };
 
   render() {
     return (
       <div className="Category">
-        <SearchBar />
         <CategoryNavBar />
         <div className="well-bs col-md-12">
-          {this.state.userInfo && <div className="white-box no-margin-top">
-            <h3>{`Hello ${this.state.userInfo.attributes.email}!`}</h3>
-          </div>}
+          {this.state.userInfo && (
+            <div className="white-box no-margin-top">
+              <h3>{`Hello ${this.state.userInfo.attributes.email}!`}</h3>
+            </div>
+          )}
           <div className="white-box">
             <h3>Past purchases</h3>
           </div>
-          {!this.state.isLoading && this.state.orders && this.state.orders
-            .sort((order1, order2) => order2.orderDate - order1.orderDate)
-            .map(order => 
-              <div className="order-date" key={order._key}>
-                <h4>{`Order date: ${this.getPrettyDate(order.orderDate)}`}</h4>
-                {order.books.map((book) => <PurchasedProductRow order={book} key={book.bookId} />)}
-              </div>)
-          }
-          
+          {!this.state.isLoading &&
+            this.state.orders &&
+            this.state.orders
+              .sort((order1, order2) => order2.orderDate - order1.orderDate)
+              .map((order) => (
+                <div className="order-date" key={order._key}>
+                  <h4>{`Order date: ${this.getPrettyDate(
+                    order.orderDate
+                  )}`}</h4>
+                  {order.books.map((book) => (
+                    <PurchasedProductRow order={book} key={book.bookId} />
+                  ))}
+                </div>
+              ))}
+
           <div className="well-bs no-margin-top no-padding col-md-12">
-          <a href="/best"><img src={bestSellers} alt="Best sellers" className="checkout-img no-padding" /></a>
-          <a href="/cart"><img src={yourshoppingcart} alt="Shopping cart" className="checkout-img no-padding" /></a>
-          
+            <a href="/best">
+              <img
+                src={bestSellers}
+                alt="Best sellers"
+                className="checkout-img no-padding"
+              />
+            </a>
+            <a href="/cart">
+              <img
+                src={yourshoppingcart}
+                alt="Shopping cart"
+                className="checkout-img no-padding"
+              />
+            </a>
           </div>
         </div>
       </div>

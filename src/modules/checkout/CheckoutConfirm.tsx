@@ -34,7 +34,6 @@ export default class Checkout extends Component<CheckoutProps, CheckoutState> {
 
     return (
       <div>
-        <SearchBar />
         <CategoryNavBar />
         <div className="well-bs">
           <div className="white-box no-margin-top no-margin-bottom">
