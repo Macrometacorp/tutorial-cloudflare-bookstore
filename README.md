@@ -4,7 +4,7 @@
 
 Macrometa-Cloudflare Bookstore Demo App is a full-stack e-commerce web application that creates a storefront (and backend) for customers to shop for "fictitious" books.
 
-![alt text](./ecommerce.png)
+![alt text](./screenshot.png)
 
 Originally based on the AWS bookstore template app (https://github.com/aws-samples/aws-bookstore-demo-app), this demo replaces all AWS services like below
 
