@@ -38,12 +38,28 @@
   color: #555;
   font-size: 18px;
   line-height: 28px;
-  padding: 40px 15px;
+  /* padding: 40px 15px; */
   font-size: 1.28em;
   font-weight: 200;
   line-height: 1.6em;
 }
-
+/* . {
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 5px 10px white;
+} */
+#footer-button {
+  border-radius: 60px !important;
+}
+.img-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+}
+.link-click {
+  cursor: pointer;
+}
 .Home a {
   font-size: 18px;
   line-height: 28px;

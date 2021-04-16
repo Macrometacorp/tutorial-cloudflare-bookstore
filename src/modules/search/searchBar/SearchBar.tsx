@@ -25,9 +25,11 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
   };
 
   onSearch = () => {
-    this.setState({
-      redirect: `/search/${this.state.value}`,
-    });
+    if (this.state.value.trim()) {
+      this.setState({
+        redirect: `/search/${this.state.value}`,
+      });
+    }
   };
 
   render() {
@@ -43,7 +45,7 @@ export class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
                 placeholder="Search"
                 value={this.state.value}
                 onChange={this.handleChange}
-                style={{ width: "8vw" }}
+                style={{ width: "5vw" }}
               />
               <div style={{ display: "flex", flexDirection: "row" }}>
                 <button

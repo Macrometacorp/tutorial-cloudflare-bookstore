@@ -21,12 +21,12 @@ export const apiRtt = (method: string) => {
       );
     });
     if (typeof duplicate == "undefined") {
-      let resor = {};
-      resor = {
+      let responseTimeValue = {};
+      responseTimeValue = {
         Name: performances[i].name,
         Status: "200",
         Path: performances[i].name.split(
-          "https://bookstore-dev.macrometadev.workers.dev"
+          "https://bookstore.macrometadev.workers.dev"
         )[1],
         Time:
           Math.round(performances[i].responseEnd - performances[i].fetchStart) +
@@ -34,14 +34,13 @@ export const apiRtt = (method: string) => {
         Method: method,
         URL: performances[i].transferSize + " B",
       };
-      newArray.push(resor);
+      newArray.push(responseTimeValue);
     }
   }
 
   let responseTimeArray = [...performanceRttArray, ...newArray];
 
   if (responseTimeArray.length > 100) {
-
     const difference = Math.abs(responseTimeArray.length - 100);
     responseTimeArray.splice(0, difference);
   }

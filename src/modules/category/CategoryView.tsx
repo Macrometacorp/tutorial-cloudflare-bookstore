@@ -57,12 +57,8 @@ const CategoryView = (props: CategoryViewProps) => {
       <CategoryNavBar />
       {props.showNetworkLatency ? (
         <EnhancedTable
-          networkapis={apiValue}
+          networkapis={apiValue.reverse()}
           tableHeading="API Calls and Performance"
-          handleBulkUpload={() => {}}
-          showSearch={false}
-          loading={false}
-          handleSetRows={() => {}}
         />
       ) : (
         <img

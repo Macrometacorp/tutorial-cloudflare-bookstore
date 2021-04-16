@@ -21,14 +21,12 @@ const Hero = (props: HeroProps) => {
   return (
     <>
       {props.showNetworkLatency ? (
-        <EnhancedTable
-          networkapis={apiValue}
-          tableHeading="API Calls and Performance"
-          handleBulkUpload={() => {}}
-          showSearch={false}
-          loading={false}
-          handleSetRows={() => {}}
-        />
+        <div id={"table-full"}>
+          <EnhancedTable
+            networkapis={apiValue.reverse()}
+            tableHeading="API Calls and Performance"
+          />
+        </div>
       ) : (
         <img
           src={image}
