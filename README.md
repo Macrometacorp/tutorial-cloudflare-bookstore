@@ -260,7 +260,7 @@ OR
             RETURN DISTINCT books
 ```
 
-**GetRecommendationsByFashionItem**:
+**GetRecommendationsByBook**:
 
 ```js
     LET userId = first(FOR user in UsersTable FILTER user.customerId == @customerId return user._id)
