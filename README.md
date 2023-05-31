@@ -381,7 +381,8 @@ Run `wrangler config` and enter the above API token when asked for. More details
 
 1. `DC_LIST`: for stream app init
 2. `C8_URL`: GDN federation URL
-3. `C8_API_KEY`: API key of the tenant being used
+3. `C8_FABRIC`: fabric name
+4. `C8_API_KEY`: API key of the tenant being used
 
 ## Publishing your project
 

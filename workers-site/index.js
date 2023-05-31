@@ -104,6 +104,7 @@ const optionsObj = {
 
 const client = new jsc8({
   url: C8_URL,
+  fabricName: C8_FABRIC,
   apiKey: C8_API_KEY,
   agentOptions: {
     maxSockets: 50000,
