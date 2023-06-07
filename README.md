@@ -22,9 +22,9 @@ As a user of the demo, you can browse and search for books, look at recommendati
 
 ## GDN Tenant Account
 
-| **Federation**                                        | **Email**              | **Passsword** |
-| ----------------------------------------------------- | ---------------------- | ------------- |
-| [Global Data Network](https://play.macrometa.io/) | demo-bookstore@macrometa.io | `xxxxxxxx`    |
+| **Federation**                                        | **Fabric** | **Email**              |
+| ----------------------------------------------------- | ------------- | ---------------------- |
+| [Play](https://play.macrometa.io/) | book_store | demo-bookstore@macrometa.io |
 
 ## Architecture
 
