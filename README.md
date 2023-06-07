@@ -22,9 +22,9 @@ As a user of the demo, you can browse and search for books, look at recommendati
 
 ## GDN Tenant Account
 
-| **Federation**                                        | **Email**              | **Passsword** |
-| ----------------------------------------------------- | ---------------------- | ------------- |
-| [Global Data Network](https://play.macrometa.io/) | demo-bookstore@macrometa.io | `xxxxxxxx`    |
+| **Federation**                                        | **Fabric** | **Email**              |
+| ----------------------------------------------------- | ------------- | ---------------------- |
+| [Play](https://play.macrometa.io/) | book_store | demo-bookstore@macrometa.io |
 
 ## Architecture
 
@@ -381,7 +381,8 @@ Run `wrangler config` and enter the above API token when asked for. More details
 
 1. `DC_LIST`: for stream app init
 2. `C8_URL`: GDN federation URL
-3. `C8_API_KEY`: API key of the tenant being used
+3. `C8_FABRIC`: fabric name
+4. `C8_API_KEY`: API key of the tenant being used
 
 ## Publishing your project
 

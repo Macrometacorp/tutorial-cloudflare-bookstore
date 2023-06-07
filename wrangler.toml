@@ -8,11 +8,10 @@ zone_id = "xxxx"
 # The route pattern your Workers application will be served at
 route = "bookstore.macrometa.io/*"
 
-vars = { DC_LIST="xxxxx", C8_URL="xxxx", C8_API_KEY="xxxx" }
+vars = { DC_LIST="xxxxx", C8_URL="xxxx", C8_FABRIC="xxxx", C8_API_KEY="xxxx" }
 kv-namespaces = [
     { binding = "BOOK_IMAGES", id = "XXXX", preview_id="xxxxx" }
 ]
 [site]
 bucket = "./build"
 entry-point = "workers-site"
-
